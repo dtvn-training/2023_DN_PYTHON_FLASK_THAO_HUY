@@ -33,19 +33,15 @@ const LoginForm = () => {
         email,
         password,
       });
-      //   setUser({ ...user, err: "", success: res.data.msg });
+      setUser({ ...user, err: "", success: res.data.msg });
       console.log("API Response:", res.data);
-      localStorage.setItem("firstLogin", true);
+      localStorage.setItem("accessToken", res.data.accessToken);
 
       dispatch(dispatchLogin());
-      navigate.push("/");
+      navigate("/home");
     } catch (err) {
-      console.log(
-        "API response is undefined or does not have the expected structure.",
-        err
-      );
-      //   err.response.data.msg &&
-      //   setUser({ ...user, err: err.response.data.msg, success: "" });
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
     }
   };
 
