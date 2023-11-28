@@ -11,7 +11,7 @@ def create_app():
     app = Flask(__name__)
     api = Api(app)
     # Cross-origin
-    CORS(app)
+    CORS(app, supports_credentials=True)
     
     # Load variables in .env environment
     load_dotenv()

@@ -14,6 +14,7 @@ from auth.auth import authMiddleware
 from auth.authAdmin import authMiddlewareAdmin
 
 from configs.errorStatus import errorStatus
+from sqlalchemy.orm.exc import NoResultFound
 
 app = Flask(__name__)
 api = Api(app)
@@ -77,7 +78,7 @@ class login(Resource):
                 if password=="" or email=="":
                     return errConfig.statusCode("Please fill in email/password field!",401)
                 
-                User = Users.query.filter_by(email = email).one_or_404('Account is not exist!')
+                User = Users.query.filter_by(email = email).one()
                 
                 checkPW = bcrypt.checkpw(password, User.password.encode('utf-8'))
                 
@@ -92,7 +93,8 @@ class login(Resource):
                 return response
 
             else: return "Content-Type not support!"
-            
+        except NoResultFound:
+            return errConfig.statusCode('Email is not exist!',401)
         except Exception as e :
             return errConfig.statusCode(str(e),500)
 # Get ACCESS_TOKEN
@@ -116,9 +118,10 @@ class getAccessToken(Resource):
             try:
                 jwt.decode(refresh_token,REFRESH_TOKEN_SECRET,"HS256")
 
-                access_token = createAccessToken(Users.user_id,Users.role_id)
+                access_token = createAccessToken(User.user_id,User.role_id)
 
-                return errConfig.msgFeedback(access_token)
+                # return errConfig.msgFeedback(access_token)
+                return access_token
 
             except InvalidTokenError:
                 return errConfig.statusCode("Invalid token",401)
@@ -129,7 +132,7 @@ class getAccessToken(Resource):
             except ExpiredSignatureError:
                 return errConfig.statusCode("The RF token is expired",401)
             except Exception as e:
-                return errConfig.statusCode(f"An unexpected error occurred:{str(e)}",500)
+                return errConfig.statusCode(f"An unexpected error occurred: {str(e)}",500)
         except Exception as e:
             return errConfig.statusCode(str(e),500)
 # GET USER INFOR
