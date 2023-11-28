@@ -129,7 +129,7 @@ class getAccessToken(Resource):
             except ExpiredSignatureError:
                 return errConfig.statusCode("The RF token is expired",401)
             except Exception as e:
-                return errConfig.statusCode("An unexpected error occurred:{str(e)}",500)
+                return errConfig.statusCode(f"An unexpected error occurred:{str(e)}",500)
         except Exception as e:
             return errConfig.statusCode(str(e),500)
 # GET USER INFOR
