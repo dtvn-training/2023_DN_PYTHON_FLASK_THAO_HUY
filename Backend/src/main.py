@@ -37,8 +37,9 @@ def create_app():
             
     # Routes
     from routes.userRoute import initialRoutes
-    
+    from routes.campaignRoute import initialRoutesCampaign
     initialRoutes(api)
+    initialRoutesCampaign(api)
 
     return app
 if __name__ == "__main__":
