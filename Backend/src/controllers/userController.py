@@ -119,10 +119,8 @@ class getAccessToken(Resource):
                 jwt.decode(refresh_token,REFRESH_TOKEN_SECRET,"HS256")
 
                 access_token = createAccessToken(User.user_id,User.role_id)
-
-                # return errConfig.msgFeedback(access_token)
+                
                 return access_token
-
             except InvalidTokenError:
                 return errConfig.statusCode("Invalid token",401)
             except DecodeError:
@@ -136,12 +134,13 @@ class getAccessToken(Resource):
         except Exception as e:
             return errConfig.statusCode(str(e),500)
 # GET USER INFOR
+
 class getUser(Resource):
     @authMiddleware
     def get(self):
         from initSQL import db
         from models.userModel import Users
-        
+
         token = request.headers.get("Authorization")
         if not token:
             return errorStatus.statusCode("Invalid Authentication.", 400)
@@ -166,13 +165,16 @@ class getAllUser(Resource):
         users = Users.query.options(db.defer(Users.password)).all()
         # Users = db.session.execute(db.select(User).order_by(User.user_id).options(db.defer(User.password))).all()
         tuple_user = [{'user_id': user.user_id,
+                       'role_id': user.role_id,
                        'first_name': user.first_name, 
                        'last_name': user.last_name,
-                       'email': user.email, 
+                       'email': user.email,
+                       'address': user.address,
+                       'phone': user.phone,
                        'create_at': user.create_at,
                        'update_at': user.update_at,
-                       'image': user.image,
-                       'role_id': user.role_id} 
+                       'image': user.avatar,
+                       } 
                     for user in users]
 
         return jsonify(users=tuple_user)

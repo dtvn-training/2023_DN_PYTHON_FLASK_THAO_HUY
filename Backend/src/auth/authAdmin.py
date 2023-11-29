@@ -22,7 +22,7 @@ def authMiddlewareAdmin(func):
 
             user = jwt.decode(token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
 
-            if user['payload'] != 1:
+            if user['role_id'] != "ADMIN":
                 return errorStatus.statusCode("Admin resources access denied.",500)
             return func(*args, **kwargs)
         except Exception as e:
