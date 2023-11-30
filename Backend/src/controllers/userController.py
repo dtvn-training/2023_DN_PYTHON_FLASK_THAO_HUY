@@ -221,11 +221,15 @@ class addUser(Resource):
 
         try:
             json = request.get_json()
+            email = json['email']
             first_name = json['first_name']
             last_name = json['last_name']
-            email = json['email']
-            password = json['password'].encode('utf-8')
             role_id = json['role_id']
+            address = json['address']
+            phone = json['phone']
+            password = json['password'].encode('utf-8')
+            
+            
             
             if not validate_email:
                 return errConfig.statusCode("Invalid email",400)
@@ -236,9 +240,9 @@ class addUser(Resource):
             if len(password) < 6:
                 return errConfig.statusCode("Password must be at least 6 characters.",400)
             
-            hashed_password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
+            hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
             
-            user = Users(first_name=first_name,last_name=last_name,email=email,password=hashed_password,role_id=role_id)
+            user = Users(email=email,first_name=first_name,last_name=last_name,role_id=role_id,address=address,phone=phone,password=hashed_password)
             db.session.add(user)
             db.session.commit()
             return errConfig.statusCode("Add User successfully!")
@@ -262,6 +266,7 @@ class updateUser(Resource):
             role_id = json['role_id']
             address = json['address']
             phone = json['phone']
+            
             
             user = jwt.decode(token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
             user_id = user['user_id']

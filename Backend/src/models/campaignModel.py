@@ -8,7 +8,7 @@ from initSQL import db
 
     
 class Campaigns(db.Model):
-    campaign_id = db.Column(db.NVARCHAR(16), primary_key = True, default=uuid.uuid4())
+    campaign_id = db.Column(db.NVARCHAR(36), primary_key = True, default=uuid.uuid4())
     name = db.Column(db.NVARCHAR(120), nullable=False)
     user_status = db.Column(db.BOOLEAN, default = True, nullable = False)
     budget = db.Column(db.INT, nullable=False)

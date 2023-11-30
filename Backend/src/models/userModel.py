@@ -1,13 +1,19 @@
 import uuid,enum
 
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.declarative import declarative_base
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 from datetime import datetime,timedelta
 from initSQL import db
+
+def generate_uuid():
+    return   
   
 class Users(db.Model):
-  user_id = db.Column(db.NVARCHAR(16), primary_key=True, default=uuid.uuid4())
+  user_id = db.Column(db.NVARCHAR(36), primary_key=True, default=str(uuid.uuid4()))
   email = db.Column(db.NVARCHAR(120), nullable = False)
   password = db.Column(db.NVARCHAR(150), nullable = False)
   first_name = db.Column(db.VARCHAR(150), nullable = False)
@@ -23,15 +29,13 @@ class Users(db.Model):
   
   role = db.relationship('Roles', backref=db.backref('users'), lazy=True)
     
-  def __init__(self, first_name, last_name,email,password,role_id,delete_flag):
+  def __init__(self,email, first_name, last_name,role_id,address,phone,password):
+    self.user_id = str(uuid.uuid4())
+    self.email = email
     self.first_name = first_name
     self.last_name = last_name
-    self.email = email
-    self.password = password
-    self.phone = phone
-    self.avatar = avatar
-    self.actions = actions
-    self.delete_flag = delete_flag
-    self.address = address
     self.role_id = role_id
-    self.delete_flag = delete_flag
+    self.address = address
+    self.phone = phone
+    self.password = password
+
