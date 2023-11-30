@@ -57,15 +57,14 @@ class getAllCampaign(Resource):
 
         return jsonify(campaigns=tuple_campaign) 
     
-# GET USER INFOR
+# GET ONE CAMPAIGN
 class getCampaign(Resource):
     @authMiddleware
-    def get_campaign_by_camp_id(self,_cam_id):
+    def get(self,_camp_id):
         from initSQL import db
-        from models.campaignModel import Campaigns
 
-
-        id = int(_cam_id)
+        id = int(_camp_id)
+        
         campaign_id = get_a_campaign_by_id(id)
         
         Campaign = Campaigns.query.filter_by(campaign_id = campaign_id).options(db.defer(Campaigns.delete_flag)).one_or_404()
@@ -75,3 +74,151 @@ class getCampaign(Resource):
         
         return jsonify(Campaign_dict)
     
+
+# ADD CAMPAIGN
+class addCampaign(Resource):
+    @authMiddleware
+    @authMiddlewareAdmin
+    def post(self):
+        from initSQL import db
+        from models.creativeModel import Creatives
+        from models.campaignModel import Campaigns
+
+        try:
+            json = request.get_json()
+            user_id = json['user_id']
+            name = json['name']
+            bid_amount = json['bid_amount']
+            budget = json['budget']
+            start_date = json['start_date']
+            end_date = json['end_date']
+            user_status = json['user_status']
+            title = json['title']
+            description = json['description']
+            img_preview = json['img_preview']
+            final_url = json['final_url']
+        
+            campaign = Campaigns(
+                user_id=user_id,
+                name=name,
+                bid_amount=int(bid_amount),
+                budget=int(budget),
+                start_date=start_date,
+                end_date=end_date,
+                user_status=user_status,
+                delete_flag = True,
+                used_amount = 0,
+                usage_rate = 0
+                )
+            db.session.add(campaign)
+            db.session.commit()
+            db.session.refresh(campaign)
+
+            campaign_id = campaign.campaign_id
+            creative = Creatives(campaign_id= campaign_id, 
+                                title = title,
+                                description = description,
+                                img_preview = img_preview,
+                                final_url = final_url,
+                                delete_flag = True,
+                                status=True)
+
+            db.session.add(creative)
+            db.session.commit()
+            db.session.refresh(creative)
+
+
+            if not check_date(start_date,end_date):
+                return errConfig.statusCode("Invalid date",400)
+            
+            
+            
+            # campaign = insert_campaign(user_id,name,bid_amount,budget,start_date,end_date,user_status,title,description,final_url,img_preview)
+            # db.session.add(campaign)
+            # db.session.commit()
+
+            return errConfig.statusCode("Add Campaign successfully!")
+        except Exception as e:
+            return errConfig.statusCode(str(e),500)
+        
+
+# UPDATE CAMPAIGN
+class updateCampaign(Resource):
+    @authMiddleware
+    def put(self):
+        from initSQL import db
+
+        try:
+            json = request.get_json()
+            campaign_id = json['campaign_id']
+            name = json['name']
+            user_id = json['user_id']
+            bid_amount = json['bid_amount']
+            budget = json['budget']
+            start_date = json['start_date']
+            end_date = json['end_date']
+            user_status = json['user_status']
+            title = json['title']
+            description = json['description']
+            img_preview = json['img_preview']
+            final_url = json['final_url']
+            
+            if not check_date(start_date,end_date):
+                return errConfig.statusCode("Invalid date",400)
+            
+
+
+            
+            
+            # campaign_updated = update_campaign(campaign_id,user_id,name,bid_amount,budget,start_date,end_date,user_status,title,description,final_url,img_preview)
+            
+            # db.session.merge(campaign_updated)
+            # db.session.commit()
+            return errConfig.statusCode('Update campaign successfully!')
+        except Exception as e:
+            return errConfig.statusCode(str(e),500)
+
+
+#SEARCH CAMPAIGN BY NAME
+class searchCampaignAPI(Resource):
+    @authMiddleware
+    def post(self):
+        from initSQL import db
+
+        try:
+            json = request.get_json()
+            name = json['name']
+            user_id = json['user_id']
+            start_date = json['start_date']
+            end_date = json['end_date']
+            
+            if not check_date(start_date,end_date):
+                return errConfig.statusCode("Invalid date",400)
+            
+            campaign_search = search_campaign(user_id, name,start_date,end_date)
+            db.session.merge(campaign_search)
+            db.session.commit()
+            return errConfig.statusCode('Search campaign successfully!')
+        except Exception as e:
+            return errConfig.statusCode(str(e),500)
+
+
+# DELETE CAMPAIGN
+class deleteCampaign(Resource):
+    @authMiddleware
+    @authMiddlewareAdmin
+    def delete(self,camp_id):
+        from initSQL import db
+        from models.campaignModel import Campaigns
+
+        try:
+            if camp_id is None:
+                return errConfig.statusCode("Invalid campaign ID", 400)
+            # campaign_id = int(camp_id)
+            camp = Campaigns.query.filter(Campaigns.campaign_id==camp_id).first()
+            if camp:
+                db.session.delete(camp)
+                db.session.commit()
+            return errConfig.statusCode("Delete User successfully!")       
+        except Exception as e:
+            return errConfig.statusCode(str(e),500)

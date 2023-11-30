@@ -83,15 +83,6 @@ def update_old_campaign(_id, _user_id, _name, _bid_amount,
         return None
 
     
-def delete_exist_campaign(_id):
-    try:
-        camp = Campaigns.query.filter(Campaigns.campaign_id==_id).first()
-        if camp:
-            db.session.delete(camp)
-            db.session.commit()
-            return True
-    except:
-        return False 
     
 
     

@@ -34,10 +34,8 @@ def update_campaign(_id, _user_id, _name, _bid_amount, _budget, _start_date,
     return result if result else None
 
 def check_date(_start_date, _end_date):
-    return _start_date >= _end_date
+    return _start_date <= _end_date
 
-def delete_campaign(_id):
-    return delete_exist_campaign(_id)
 
     
 
