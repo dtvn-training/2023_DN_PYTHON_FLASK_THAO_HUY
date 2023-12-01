@@ -351,3 +351,375 @@
     }
   }
   ```
+
+
+
+  ## Campaign 
+
+  ## Get campaign
+
+- ### **[GET]/api/campaign/<_camp_id>**
+  > - Summary: Get campaign informations
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: User
+  - ### **Request HEADER:**
+  ```
+  {
+    'Authorization': 'Access Token'
+  }
+  ```
+  - ### **Responses:**
+  ```
+  '200' = {
+    "user_id",
+    "name",
+    "user_status",
+    "budget",
+    "bid_amount",
+    "start_date",
+    "end_date",
+    "usage_rate",
+    "campaign_id",
+    "create_at",
+    "update_at"
+  }
+  ```
+  - ### **Error Handling:**
+  ```
+  {
+  '400' = {
+  		'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Unexpected error!'
+    }
+  }
+  ```
+
+ - ### **Example:**
+ ```
+ URL : {{domain}}/api/campaign/6f0caf18-5dcc-4f95-ace3-381536a2bdad
+ Reponse :
+ {
+    "bid_amount": 0,
+    "budget": 1000,
+    "campaign_id": "6f0caf18-5dcc-4f95-ace3-381536a2bdad",
+    "create_at": "Fri, 01 Dec 2023 10:04:19 GMT",
+    "end_date": "Fri, 05 May 2023 23:59:59 GMT",
+    "name": "abcd123",
+    "start_date": "Sun, 01 Jan 2023 23:59:59 GMT",
+    "update_at": "Fri, 01 Dec 2023 10:04:19 GMT",
+    "usage_rate": 0.0,
+    "used_amount": 0,
+    "user_id": "6cd11s58-f613-47",
+    "user_status": true
+}
+ ```
+
+
+- ## Get all campaigns
+- ### **[GET]/api/all_campaign**
+
+  > - Summary: Get all campaign informations
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: Admin, User
+
+  - ### **Request HEADER:**
+
+  ```
+  {
+    'Authorization': 'Access Token'
+  }
+  ```
+
+  - ### **Responses:**
+
+  ```
+  '200' = {
+    msg: [
+        campaign1 = {
+            "user_id",
+            "name",
+            "user_status",
+            "budget",
+            "bid_amount",
+            "start_date",
+            "end_date",
+            "usage_rate",
+            "campaign_id",
+            "create_at",
+            "update_at"
+        },
+        campaign2 = {
+            "user_id",
+            "name",
+            "user_status",
+            "budget",
+            "bid_amount",
+            "start_date",
+            "end_date",
+            "usage_rate",
+            "campaign_id",
+            "create_at",
+            "update_at"
+        },
+        ...]
+
+  }
+  ```
+
+  - ### **Error Handling:**
+
+  ```
+  {
+  '400' = {
+  		'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Admin resources access denied!'
+    }
+  }
+  ```
+
+
+ - ### **Example:**
+ ```
+ URL : {{domain}}/api/all_campaign
+ Reponse :
+  {
+    "campaigns": [
+        {
+            "bid_amount": 0,
+            "budget": 100,
+            "campaign_id": "123",
+            "create_at": null,
+            "end_date": "Tue, 26 Dec 2023 23:59:59 GMT",
+            "name": "abc",
+            "start_date": "Thu, 23 Nov 2023 23:59:59 GMT",
+            "update_at": null,
+            "usage_rate": 10.0,
+            "user_id": "6cd11s58-f613-47",
+            "user_status": true
+        },
+        {
+            "bid_amount": 0,
+            "budget": 100,
+            "campaign_id": "324e144e-9686-42",
+            "create_at": null,
+            "end_date": "Mon, 25 Dec 2023 23:59:59 GMT",
+            "name": "abc",
+            "start_date": "Sat, 25 Nov 2023 23:59:59 GMT",
+            "update_at": null,
+            "usage_rate": 10.0,
+            "user_id": "6cd11s58-f613-47",
+            "user_status": true
+        }
+    ]
+}
+
+ ```
+
+
+- ## Delete user
+- ### **[DELETE]/api/delete_campaign/<camp_id>**
+  > - Summary: Delete Campaign by ID
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: Admin, User
+  - ### **Request HEADER:**
+  ```
+  {
+    'Authorization': 'Access Token'
+  }
+  ```
+  - ### **Responses:**
+  ```
+  '200' = {
+    msg: "Delete Campaign successfully!"
+  }
+  ```
+  - ### **Error Handling:**
+  ```
+  {
+  '400' = {
+  		'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Unexpected Error!'
+    }
+  }
+  ```
+
+  - ### **Example:**
+ ```
+ URL :  {{domain}}/api/delete_campaign/324e144e-9686-42
+ Reponse :
+  {
+    "msg": "Delete Campaign successfully!",
+    "payload": null,
+    "status_code": 200
+  }
+
+```
+
+
+- ## Update campaign
+- ### **[PUT]/api/update_campaign**
+  > - Summary: Update campaign 
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: User
+  - ### **Request HEADER:**
+  ```
+  {
+    'Authorization': 'Access Token',
+  }
+  ```
+  - ### **Responses:**
+  ```
+  '200' = {
+    msg: "Update campaign successfully!"
+  }
+  ```
+  - ### **Error Handling:**
+  ```
+  {
+  '400' = {
+  		'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Unexpected Error!'
+    }
+  }
+  ```
+
+  - ### **Example:**
+ ```
+ URL :  {{domain}}/api/update_campaign
+ Body : 
+ {
+    "campaign_id": "324e144e-9686-42",
+    "name" : "abcd1234567",
+    "user_id": "6cd11s58-f613-47",
+    "bid_amount": "0",
+    "budget": "1000",
+    "start_date" : "2023-11-23 23:59:59",
+    "end_date" : "2023-11-27 23:59:59",
+    "user_status": "2",
+    "title": "haizzz",
+    "description": "help me",
+    "img_preview": "hrhshseh",
+    "final_url": "tjthhh"
+  }
+ Reponse :
+  {
+    "msg": "Update Campaign successfully!",
+    "payload": null,
+    "status_code": 200
+  }
+
+```
+
+
+
+- ## Create campaign
+- ### **[POST]/api/add_campaign**
+  > - Summary: Update campaign 
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: User, Admin
+  - ### **Request HEADER:**
+  ```
+  {
+    'Authorization': 'Access Token',
+  }
+  ```
+  - ### **Responses:**
+  ```
+  '200' = {
+    msg: "Add campaign successfully!"
+  }
+  ```
+  - ### **Error Handling:**
+  ```
+  {
+  '400' = {
+  		'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Unexpected Error!'
+    }
+  }
+  ```
+  - ### **Example:**
+ ```
+ URL :  {{domain}}/api/add_campaign
+ Body :
+ {
+    "name" : "abcd123",
+    "user_id": "6cd11s58-f613-47",
+    "bid_amount": "0",
+    "budget": "1000",
+    "start_date" : "2023-01-01 23:59:59",
+    "end_date" : "2023-05-05 23:59:59",
+    "user_status": true,
+    "title": "help",
+    "description": "help me",
+    "img_preview": "afhbfd",
+    "final_url": "tjthhh"
+}
+
+ Reponse :
+  {
+    "msg": "Add Campaign successfully!",
+    "payload": null,
+    "status_code": 200
+}
+
+```
+
+- ## Search campaign 
+- ### **[POST]/api/campaign/search**
+  > - Summary:  Search campaign by name
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: User
+  - ### **Request HEADER:**
+  ```
+  {
+    'Authorization': 'Access Token',
+  }
+  ```
+  - ### **Responses:**
+  ```
+  '200' = {
+    msg: "Search campaign successfully!"
+  }
+  ```
+  - ### **Error Handling:**
+  ```
+  {
+  '400' = {
+  		'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Unexpected Error!'
+    }
+  }
+  ```
+  - ### **Example:**
+ ```
+ URL :  {{domain}}/api/campaign/search
+ Body :
+{
+    "name" : "abcd123",
+    "user_id": "6cd11s58-f613-47",
+    "start_date" : "2023-01-01 23:59:59",
+    "end_date" : "2023-05-05 23:59:59"
+}
+
+
+ Reponse :
+  {
+    "msg": "Search campaign successfully!",
+    "payload": null,
+    "status_code": 200
+}
+
+```
