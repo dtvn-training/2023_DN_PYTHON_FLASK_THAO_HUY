@@ -145,8 +145,6 @@ class addCampaign(Resource):
 class updateCampaign(Resource):
     @authMiddleware
     def put(self):
-        from initSQL import db
-        from models.creativeModel import Creatives
 
         try:
             json = request.get_json()
@@ -181,21 +179,14 @@ class updateCampaign(Resource):
                 campaign.bid_amount = bid_amount
                 campaign.start_date = start_date
                 campaign.end_date = end_date
-                # campaign.updated_at = update_at
 
                 creative = campaign.creative
                 creative.title = title
                 creative.description = description
                 creative.img_preview = img_preview
                 creative.url = final_url
-                # creative_record.updated_at = campaign_record.updated_at
 
-                db.commit()
-                db.refresh(campaign)
-                # campaign_updated = update_campaign(campaign_id,user_id,name,bid_amount,budget,start_date,end_date,user_status,title,description,final_url,img_preview)
-
-                # db.session.merge(campaign_updated)
-                # db.session.commit()
+                db.session.commit()
                 return errConfig.statusCode("Update campaign successfully!")
             except:
                 return errConfig.statusCode("Update campaign failed!")
