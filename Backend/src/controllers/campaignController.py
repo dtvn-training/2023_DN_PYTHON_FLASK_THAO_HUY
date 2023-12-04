@@ -41,7 +41,7 @@ ACCESS_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET")
 # GET ALL CAMPAIGN
 class getAllCampaign(Resource):
     @authMiddleware
-    @authMiddlewareAdmin
+    # @authMiddlewareAdmin
     def get(self):
         campaigns = Campaigns.query.options(db.defer(Campaigns.delete_flag)).all()
 
@@ -86,7 +86,7 @@ class getCampaign(Resource):
 # ADD CAMPAIGN
 class addCampaign(Resource):
     @authMiddleware
-    @authMiddlewareAdmin
+    # @authMiddlewareAdmin
     def post(self):
         try:
             json = request.get_json()
@@ -101,6 +101,11 @@ class addCampaign(Resource):
             description = json["description"]
             img_preview = json["img_preview"]
             final_url = json["final_url"]
+
+            if not check_date(start_date, end_date):
+                return errConfig.statusCode("Invalid date", 400)
+            
+
 
             campaign = Campaigns(
                 user_id=user_id,
@@ -132,9 +137,6 @@ class addCampaign(Resource):
             db.session.add(creative)
             db.session.commit()
             db.session.refresh(creative)
-
-            if not check_date(start_date, end_date):
-                return errConfig.statusCode("Invalid date", 400)
 
             return errConfig.statusCode("Add Campaign successfully!")
         except Exception as e:
@@ -221,7 +223,7 @@ class searchCampaignAPI(Resource):
 # DELETE CAMPAIGN
 class deleteCampaign(Resource):
     @authMiddleware
-    @authMiddlewareAdmin
+    # @authMiddlewareAdmin
     def delete(self, camp_id):
 
         try:
