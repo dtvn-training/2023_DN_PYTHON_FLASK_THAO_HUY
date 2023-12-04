@@ -390,6 +390,9 @@
   '400' = {
   		'msg': 'Invalid Authentication!'
     }
+  '404' = {
+  		'msg': 'Campaign not found!'
+    }
   '500' = {
   		'msg': 'Unexpected error!'
     }
@@ -475,6 +478,9 @@
   '400' = {
   		'msg': 'Invalid Authentication!'
     }
+  '404' = {
+  		'msg': 'Campaign not found!'
+    }
   '500' = {
   		'msg': 'Admin resources access denied!'
     }
@@ -520,8 +526,8 @@
  ```
 
 
-- ## Delete user
-- ### **[DELETE]/api/delete_campaign/<camp_id>**
+- ## Delete campaign
+- ### **[DELETE]/api/delete_campaign<camp_id>**
   > - Summary: Delete Campaign by ID
   > - Header (Authorization): AccessToken[Payload]
   > - Accessible: Admin, User
@@ -536,12 +542,22 @@
   '200' = {
     msg: "Delete Campaign successfully!"
   }
+  '400' = {
+  		'msg': 'Invalid campaign ID'
+  }
+  '404' = {
+  		'msg': 'Delete Campaign failed!'
+    }
   ```
   - ### **Error Handling:**
   ```
   {
   '400' = {
-  		'msg': 'Invalid Authentication!'
+  		'msg': 'Invalid campaign ID'
+      'msg': 'Invalid campaign ID'
+    }
+  '404' = {
+  		'msg': 'Delete Campaign failed!'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
@@ -563,7 +579,7 @@
 
 
 - ## Update campaign
-- ### **[PUT]/api/update_campaign**
+- ### **[PUT]/api/update_campaign/<camp_id>**
   > - Summary: Update campaign 
   > - Header (Authorization): AccessToken[Payload]
   > - Accessible: User
@@ -578,12 +594,24 @@
   '200' = {
     msg: "Update campaign successfully!"
   }
+  '400' = {
+  		'msg': 'Invalid date',
+      'msg': 'Invalid name. Please re-enter',
+      'msg': 'Invalid title. Please re-enter',
+      'msg': 'Invalid. Please re-enter',
+      'msg': 'Update campaign failed!',
+    }
   ```
   - ### **Error Handling:**
   ```
   {
   '400' = {
   		'msg': 'Invalid Authentication!'
+      'msg': 'Invalid date',
+      'msg': 'Invalid name. Please re-enter',
+      'msg': 'Invalid title. Please re-enter',
+      'msg': 'Invalid. Please re-enter',
+      'msg': 'Update campaign failed!'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
@@ -636,12 +664,24 @@
   '200' = {
     msg: "Add campaign successfully!"
   }
+  '400' = {
+  		'msg': 'Invalid date',
+      'msg': 'Invalid name. Please re-enter',
+      'msg': 'Invalid title. Please re-enter',
+      'msg': 'Invalid. Please re-enter',
+      'msg': 'Add campaign failed!'
+    }
   ```
   - ### **Error Handling:**
   ```
   {
   '400' = {
   		'msg': 'Invalid Authentication!'
+      'msg': 'Invalid date',
+      'msg': 'Invalid name. Please re-enter',
+      'msg': 'Invalid title. Please re-enter',
+      'msg': 'Invalid. Please re-enter',
+      'msg': 'Add campaign failed!'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
@@ -691,12 +731,17 @@
   '200' = {
     msg: "Search campaign successfully!"
   }
+  '400' = {
+  		'msg': 'Search campaign failed!',
+      'msg': 'Invalid date'
+    }
   ```
   - ### **Error Handling:**
   ```
   {
   '400' = {
   		'msg': 'Invalid Authentication!'
+      'msg': 'Search campaign failed!'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
