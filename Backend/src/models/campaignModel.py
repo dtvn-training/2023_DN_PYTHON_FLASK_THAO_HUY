@@ -8,12 +8,12 @@ from initSQL import db
 
     
 class Campaigns(db.Model):
-    campaign_id = db.Column(db.INT, primary_key = True,nullable=False)
+    campaign_id = db.Column(db.INT, primary_key = True)
     name = db.Column(db.NVARCHAR(120), nullable=False)
     user_status = db.Column(db.BOOLEAN, default = True, nullable = False)
     budget = db.Column(db.INT, nullable=False)
     bid_amount = db.Column(db.INT, nullable=False)
-    user_id = db.Column(db.INT, db.ForeignKey('users.user_id'),nullable=False)
+    user_id = db.Column(db.INT, db.ForeignKey('users.user_id'))
     used_amount = db.Column(db.INT, nullable=False)
     usage_rate = db.Column(db.FLOAT, nullable=False)
     start_date = db.Column(db.DATETIME, nullable=False)

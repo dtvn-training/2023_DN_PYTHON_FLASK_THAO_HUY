@@ -17,9 +17,9 @@ def initialRoutesCampaign(api):
     api.add_resource(addCampaign,"/api/add_campaign", endpoint="add_campaign")
     
     # [PUT] UPDATE USER
-    api.add_resource(updateCampaign,"/api/update_campaign", endpoint="update_campaign")
+    api.add_resource(updateCampaign,"/api/update_campaign/<camp_id>", endpoint="update_campaign")
 
-    # [POST] SHARE CAMPAIGN BY NAME
+    # [POST] SHARE CAMPAIGN 
     api.add_resource(searchCampaignAPI,"/api/campaign/search", endpoint="search_campaign")
 
     # [DELETE] DELETE CAMPAIGN

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from initSQL import db
 
 class Creatives(db.Model):
-    creative_id = db.Column(db.INT, primary_key=True,nullable=False)
+    creative_id = db.Column(db.INT, primary_key=True)
     title = db.Column(db.NVARCHAR(120), nullable=False)
     description = db.Column(db.NVARCHAR(255), nullable=False)
     img_preview = db.Column(db.VARCHAR(255), nullable=False)
