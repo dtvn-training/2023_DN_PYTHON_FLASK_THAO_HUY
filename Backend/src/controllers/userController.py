@@ -13,7 +13,7 @@ from flask_restful import Resource, Api
 from auth.auth import authMiddleware
 from auth.authAdmin import authMiddlewareAdmin
 
-from configs.errorStatus import errorStatus
+from config.errorStatus import errorStatus
 from sqlalchemy.orm.exc import NoResultFound
 
 app = Flask(__name__)

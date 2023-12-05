@@ -20,5 +20,5 @@ class errorStatus():
     def statusDefault(self,errNum):
         return make_response(jsonify(errorStatusList[errNum]),errorStatusList[errNum]["status_code"])
 
-    def errDB(self,*arg,**kwargs):
-        return 
+    # def errDB(self,*arg,**kwargs):
+    #     return 
