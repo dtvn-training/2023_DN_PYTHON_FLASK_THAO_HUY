@@ -157,7 +157,7 @@ class getUser(Resource):
 # GET ALL USER INFO
 class getAllUser(Resource):
     @authMiddleware
-    @authMiddlewareAdmin
+    # @authMiddlewareAdmin
     def get(self):
         from initSQL import db
         from models.userModel import Users
@@ -228,9 +228,7 @@ class addUser(Resource):
             address = json['address']
             phone = json['phone']
             password = json['password'].encode('utf-8')
-            
-            
-            
+
             if not validate_email:
                 return errConfig.statusCode("Invalid email",400)
             
@@ -260,7 +258,7 @@ class updateUser(Resource):
             return errorStatus.statusCode("Invalid Authentication.", 400)
         try:
             json = request.get_json()
-            email = json['email']
+            # email = json['email']
             first_name = json['first_name']
             last_name = json['last_name']
             role_id = json['role_id']
@@ -271,11 +269,15 @@ class updateUser(Resource):
             user = jwt.decode(token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
             user_id = user['user_id']
             
-            user_to_update = Users.query.filter_by(id=user_id).first()
+            user = Users.query.filter_by(user_id=user_id).first()
+            user.first_name = first_name
+            user.last_name = last_name
+            user.role_id = role_id
+            user.address = address
+            user.phone = phone
             
-            user_updated = Users(id=user_id, email=email, first_name=first_name, last_name=last_name,role_id=role_id,address=address,phone=phone)
-            db.session.merge(user_updated)
             db.session.commit()
+            
             return errConfig.statusCode('Update user successfully!')
         except Exception as e:
             return errConfig.statusCode(str(e),500)

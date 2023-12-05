@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import "./LoginForm.scss";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { dispatchLogin } from "../../redux/actions/authUser";
 import { useDispatch } from "react-redux";
-import { validate } from "../../utils/validateData";
+
+import "./LoginForm.scss";
+
+import { useNavigate } from "react-router-dom";
+import { dispatchLogin } from "../../redux/actions/authAction";
+import {
+  turnOnLoading,
+  turnOffLoading,
+} from "../../redux/actions/loadingAction";
+
+import AccountServices from "../../services/AccountServices";
+
+import {
+  showSuccessMsg,
+  showErrMsg,
+} from "../../utils/Notification/Notification";
 
 const initialState = {
   email: "",
@@ -29,23 +40,23 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
+      const res = AccountServices.userLogin({
         email,
         password,
       });
-      //   setUser({ ...user, err: "", success: res.data.msg });
-      console.log("API Response:", res.data);
-      localStorage.setItem("firstLogin", true);
 
+      setUser({ ...user, err: "", success: res.data.msg });
+      console.log(res);
+
+      dispatch(turnOnLoading());
       dispatch(dispatchLogin());
-      navigate.push("/");
+      localStorage.setItem("firstLogin", "logged");
+      dispatch(turnOffLoading());
+
+      navigate("/");
     } catch (err) {
-      console.log(
-        "API response is undefined or does not have the expected structure.",
-        err
-      );
-      //   err.response.data.msg &&
-      //   setUser({ ...user, err: err.response.data.msg, success: "" });
+      dispatch(turnOffLoading());
+      err.message && setUser({ ...user, err: err.message, success: "" });
     }
   };
 
@@ -53,10 +64,13 @@ const LoginForm = () => {
     <div className="form">
       <form onSubmit={handleSubmit}>
         <label className="title-login">WELCOME</label>
+        {err && showErrMsg(err)}
+        {success && showSuccessMsg(success)}
+
         <div className="input-container">
           <input
             type="email"
-            value={encodeURI(email)}
+            value={email}
             id="email"
             name="email"
             placeholder="Email"
@@ -67,7 +81,7 @@ const LoginForm = () => {
         <div className="input-container">
           <input
             type="password"
-            value={encodeURI(password)}
+            value={password}
             id="pass"
             name="password"
             onChange={handleChangeInput}
@@ -79,7 +93,6 @@ const LoginForm = () => {
           <button className="login-button" type="submit">
             Login
           </button>
-          .
         </div>
         <div className="extension-login">
           <button className="login-facebook">Facebook</button>

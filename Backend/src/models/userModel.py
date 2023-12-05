@@ -21,7 +21,7 @@ class Users(db.Model):
   role_id = db.Column(db.Enum('ADMIN','DAC','ADVERTISER'), db.ForeignKey('roles.role_id'), nullable=False, default='ADMIN')
   address = db.Column(db.VARCHAR(255), nullable = False)
   phone = db.Column(db.VARCHAR(11), nullable = False, unique = True)
-  avatar = db.Column(db.NVARCHAR(255), default="https://res.cloudinary.com/dooge27kv/image/upload/v1667982724/project/avatar.png")
+  avatar = db.Column(db.NVARCHAR(255), default="https://res.cloudinary.com/dooge27kv/image/upload/v1701672147/user_ccpmhz.png")
   actions = db.Column(db.VARCHAR(150), nullable = True)
   create_at = db.Column(db.TIMESTAMP, default=datetime.now())
   update_at = db.Column(db.TIMESTAMP, default=datetime.now(), onupdate=datetime.now())
