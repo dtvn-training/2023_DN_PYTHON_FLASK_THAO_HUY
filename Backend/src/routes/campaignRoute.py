@@ -16,7 +16,7 @@ def initialRoutesCampaign(api):
     # [POST] ADD CAMPAIGN
     api.add_resource(addCampaign,"/api/add_campaign", endpoint="add_campaign")
     
-    # [PUT] UPDATE USER
+    # [PUT] UPDATE CAMPAIGN
     api.add_resource(updateCampaign,"/api/update_campaign/<camp_id>", endpoint="update_campaign")
 
     # [POST] SHARE CAMPAIGN 
@@ -24,3 +24,6 @@ def initialRoutesCampaign(api):
 
     # [DELETE] DELETE CAMPAIGN
     api.add_resource(deleteCampaign,"/api/delete_campaign/<camp_id>", endpoint="delete_campaign")
+
+    # [PUT] UPDATE BANNER CAMPAIGN
+    api.add_resource(bannerCampaign,"/api/banner_campaign/<camp_id>", endpoint="banner_campaign")

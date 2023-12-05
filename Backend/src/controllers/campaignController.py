@@ -276,3 +276,45 @@ class deleteCampaign(Resource):
                 return errConfig.statusCode("Delete Campaign failed!", 404)
         except Exception as e:
             return errConfig.statusCode(str(e), 500)
+
+
+class bannerCampaign(Resource):
+    @authMiddleware
+    # @authMiddlewareAdmin
+    def put(self,camp_id):
+        try:
+            json = request.get_json()
+            budget = int(json["budget"])
+            end_date = json["end_date"]
+            bid_amount = int(json['bid_amount'])
+            usage_rate = (bid_amount / budget) * 100
+            user_status = json['user_status']
+
+            if camp_id is None:
+                return errConfig.statusCode("Invalid campaign ID", 400)
+
+            camp = Campaigns.query.filter(Campaigns.campaign_id == camp_id).first()
+            
+            if camp:
+                used_amount = camp.used_amount + bid_amount
+
+                # Tính toán usage rate
+                # usage_rate = (bid_amount / budget) * 100
+
+                # Kiểm tra điều kiện kết thúc
+                if end_date == datetime.today().date() or budget <= used_amount:
+                    user_status == False
+
+                # Cập nhật used amount và usage rate vào cơ sở dữ liệu
+                camp.used_amount = used_amount
+                camp.usage_rate = usage_rate
+                camp.user_status = user_status
+                db.session.commit()
+
+                # Trả về phản hồi thành công
+                return errConfig.statusCode("Update banner successfully!",200)
+            else:
+                return errConfig.statusCode("Update banner failed!",404)
+
+        except Exception as e:
+            return errConfig.statusCode(str(e), 500)
