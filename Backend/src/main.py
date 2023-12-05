@@ -11,7 +11,7 @@ def create_app():
     app = Flask(__name__)
     api = Api(app)
     # Cross-origin
-    CORS(app)
+    CORS(app, supports_credentials=True)
     
     # Load variables in .env environment
     load_dotenv()
@@ -23,9 +23,10 @@ def create_app():
     db.init_app(app)
     
     with app.app_context():
-        from models.campaignModel import Campaign
+        from models.campaignModel import Campaigns
         from models.rolesModel import Roles
-        from models.userModel import User
+        from models.userModel import Users
+        from models.creativeModel import Creatives
         
         createTable = db.create_all()
         

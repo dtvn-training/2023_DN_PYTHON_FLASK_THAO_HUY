@@ -2,7 +2,7 @@
 from flask import Flask
 from flask_restful import Api
 
-from controllers.userController import login, logout, getUser, getAllUser, getAccessToken, deleteUser,addUser
+from controllers.userController import login, logout, getUser, getAllUser, getAccessToken, deleteUser,addUser, deleteAllUser, updateUser
 
 
 def initialRoutes(api):
@@ -22,8 +22,14 @@ def initialRoutes(api):
     # [GET] GET ALL USERS
     api.add_resource(getAllUser,"/api/all_user_info", endpoint="get_all_user")
     
-    # [POST] DELETE USER
-    api.add_resource(deleteUser,"/api/delete_user", endpoint="delete_user")
-    
     # [POST] ADD USER
     api.add_resource(addUser,"/api/add_user", endpoint="add_user")
+    
+    # [DELETE] DELETE USER
+    api.add_resource(deleteUser,"/api/delete_user", endpoint="delete_user")
+    
+    # [DELETE] DELETE ALL USERS
+    api.add_resource(deleteAllUser,"/api/delete_all_user", endpoint="delete_all_user")
+    
+    # [PUT] UPDATE USER
+    api.add_resource(deleteAllUser,"/api/update_all_user", endpoint="update_all_user")
