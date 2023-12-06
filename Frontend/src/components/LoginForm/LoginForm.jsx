@@ -45,7 +45,7 @@ const LoginForm = () => {
         password,
       });
 
-      setUser({ ...user, err: "", success: res.data.msg });
+      setUser({ ...user, err: "", success: res.data });
       console.log(res);
 
       dispatch(turnOnLoading());
@@ -64,7 +64,7 @@ const LoginForm = () => {
     <div className="form">
       <form onSubmit={handleSubmit}>
         <label className="title-login">WELCOME</label>
-        {err && showErrMsg(err)}
+        {err && showErrMsg(err)} 
         {success && showSuccessMsg(success)}
 
         <div className="input-container">

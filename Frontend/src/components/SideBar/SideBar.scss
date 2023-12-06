@@ -70,3 +70,15 @@
 .item-side:hover {
   background-color: #a7d9ee;
 }
+
+
+@media screen and (max-width: 1024px) {
+  .side-bar {
+    width: 35%;
+  }
+}
+
+/* For Medium Devices */
+@media screen and (max-width: 768px) {
+  
+}
