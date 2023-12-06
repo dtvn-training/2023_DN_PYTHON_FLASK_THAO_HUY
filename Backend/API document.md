@@ -543,21 +543,20 @@
     msg: "Delete Campaign successfully!"
   }
   '400' = {
-  		'msg': 'Invalid campaign ID'
+  		'msg': 'Delete Campaign failed!'
   }
   '404' = {
-  		'msg': 'Delete Campaign failed!'
+  		'msg': 'Invalid campaign ID'
     }
   ```
   - ### **Error Handling:**
   ```
   {
   '400' = {
-  		'msg': 'Invalid campaign ID'
-      'msg': 'Invalid campaign ID'
+  		'msg': 'Delete Campaign failed!'
     }
   '404' = {
-  		'msg': 'Delete Campaign failed!'
+  		'msg': 'Invalid campaign ID'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
@@ -763,6 +762,64 @@
  Reponse :
   {
     "msg": "Search campaign successfully!",
+    "payload": null,
+    "status_code": 200
+}
+
+```
+
+- ## Banner campaign 
+- ### **[POST]/api/banner_campaign/<camp_id>**
+  > - Summary:  Search campaign by name
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: User, Admin
+  - ### **Request HEADER:**
+  ```
+  {
+    'Authorization': 'Access Token',
+  }
+  ```
+  - ### **Responses:**
+  ```
+  '200' = {
+    msg: "Update campaign successfully!"
+  }
+  '404' = {
+      'msg': 'Invalid campaign ID'
+    }
+  '400' = {
+  		'msg': 'Update campaign failed!',
+    }
+  ```
+  - ### **Error Handling:**
+  ```
+  {
+  '404' = {
+      'msg': 'Invalid campaign ID'
+    }
+  '400' = {
+  		'msg': 'Update campaign failed!',
+      'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Unexpected Error!'
+    }
+  }
+  ```
+  - ### **Example:**
+ ```
+ URL :  {{domain}}/api/banner_campaign/7
+ Body :
+{
+    "budget" : "2000",
+    "end_date" : "2023-05-05 23:59:59",
+    "bid_amount": "900",
+    "user_status": true
+}
+
+ Reponse :
+ {
+    "msg": "Update banner successfully!",
     "payload": null,
     "status_code": 200
 }
