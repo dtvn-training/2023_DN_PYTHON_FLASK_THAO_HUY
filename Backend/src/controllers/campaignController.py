@@ -1,5 +1,6 @@
-import json, os, re, jwt
-import bcrypt
+import json, os, re, jwt,bcrypt
+
+from collections import OrderedDict
 
 from jwt.exceptions import *
 from datetime import datetime, timedelta
@@ -14,8 +15,8 @@ from flask_restful import Resource, Api
 from auth.auth import authMiddleware
 from auth.authAdmin import authMiddlewareAdmin
 
-# CONFIGS
-from configs.errorStatus import errorStatus
+# CONFIG
+from config.errorStatus import errorStatus
 
 # SERVICES
 from services.campaign_service import *
@@ -44,26 +45,47 @@ class getAllCampaign(Resource):
     @authMiddlewareAdmin
     def get(self):
         try:
-            campaigns = Campaigns.query.options(db.defer(Campaigns.delete_flag)).all()
-
+            campaigns = Campaigns.query.all()
+            
             if campaigns:
-                tuple_campaign = [
-                    {
-                        "user_id": campaign.user_id,
-                        "name": campaign.name,
-                        "user_status": campaign.user_status,
-                        "budget": campaign.budget,
-                        "create_at": campaign.create_at,
-                        "update_at": campaign.update_at,
-                        "bid_amount": campaign.bid_amount,
-                        "start_date": campaign.start_date,
-                        "end_date": campaign.end_date,
-                        "usage_rate": campaign.usage_rate,
-                        "campaign_id": campaign.campaign_id,
-                    }
-                    for campaign in campaigns
-                ]
-                return jsonify(campaigns=tuple_campaign)
+                campaign_list = []
+                for campaign in campaigns:
+                    creatives = Creatives.query.filter_by(campaign_id=campaign.campaign_id).all()
+                    tuple_creative = [
+                        {
+                            "creative_id": creative.creative_id,
+                            "title": creative.title,
+                            "description": creative.description,
+                            "img_preview": creative.img_preview,
+                            "final_url": creative.final_url,
+                            "status": creative.status,
+                            "create_at": creative.create_at,
+                            "update_at": creative.update_at,
+                            "delete_flag": creative.delete_flag,
+                            "campaign_id": creative.campaign_id,
+                        }
+                        for creative in creatives
+                    ]
+
+                    campaign_info = OrderedDict([
+                        ("user_id", campaign.user_id),
+                        ("name", campaign.name),
+                        ("user_status", campaign.user_status),
+                        ("used_amount", campaign.used_amount),
+                        ("budget", campaign.budget),
+                        ("create_at", campaign.create_at),
+                        ("update_at", campaign.update_at),
+                        ("bid_amount", campaign.bid_amount),
+                        ("start_date", str(campaign.start_date)),
+                        ("end_date", str(campaign.end_date)),
+                        ("usage_rate", campaign.usage_rate),
+                        ("campaign_id", campaign.campaign_id),
+                        ("creatives", tuple_creative)
+                    ])
+
+                    campaign_list.append(campaign_info)
+
+                return jsonify(campaigns=campaign_list)
             else:
                 return errConfig.statusCode("Campaign not found", 404)
         except Exception as e:
@@ -128,12 +150,12 @@ class addCampaign(Resource):
                 campaign = Campaigns(
                     user_id=user_id,
                     name=name,
-                    bid_amount=int(bid_amount),
-                    budget=int(budget),
+                    bid_amount=bid_amount,
+                    budget=budget,
                     start_date=start_date,
                     end_date=end_date,
                     user_status=user_status,
-                    delete_flag=True,
+                    delete_flag=False,
                     used_amount=0,
                     usage_rate=0,
                 )
@@ -148,7 +170,7 @@ class addCampaign(Resource):
                     description=description,
                     img_preview=img_preview,
                     final_url=final_url,
-                    delete_flag=True,
+                    delete_flag=False,
                     status=True,
                 )
 
@@ -157,8 +179,8 @@ class addCampaign(Resource):
                 db.session.refresh(creative)
 
                 return errConfig.statusCode("Add Campaign successfully!",200)
-            except:
-                return errConfig.statusCode("Add Campaign failed!",400)
+            except Exception as e:
+                return errConfig.statusCode(f"Add Campaign failed!{str(e)}",400)
         except Exception as e:
             return errConfig.statusCode(str(e), 500)
 
@@ -167,10 +189,8 @@ class addCampaign(Resource):
 class updateCampaign(Resource):
     @authMiddleware
     def put(self, camp_id):
-
         try:
             json = request.get_json()
-            name = json["name"]
             user_id = json["user_id"]
             bid_amount = json["bid_amount"]
             budget = json["budget"]
@@ -185,15 +205,16 @@ class updateCampaign(Resource):
             if not check_date(start_date, end_date):
                 return errConfig.statusCode("Invalid date", 400)
             
-            if len(name) > 120 or len(name) ==0:
-                return errConfig.statusCode("Invalid name. Please re-enter",400)
+            # Không đổi tên campaign validate lại!
+            # if len(name) > 120 or len(name) ==0:
+            #     return errConfig.statusCode("Invalid name. Please re-enter",400)
             
-            if len(title) > 120 or len(name) ==0:
-                return errConfig.statusCode("Invalid title. Please re-enter",400)
+            # if len(title) > 120 or len(name) ==0:
+            #     return errConfig.statusCode("Invalid title. Please re-enter",400)
 
             if (len(description) >255 or len(img_preview) > 255 or len(final_url) > 255 
-                or len(description) ==0 or len(img_preview) ==0 or len(final_url) ==0
-                or len(bid_amount) ==0  or len(budget) == 0):
+                or len(description) ==0 or len(img_preview) ==0 or len(final_url) ==0):
+                # or len(bid_amount) == 0  or len(budget) == 0):
                 return errConfig.statusCode("Invalid. Please re-enter",400)
 
             campaign = Campaigns.query.filter(
@@ -205,7 +226,6 @@ class updateCampaign(Resource):
             ).first()
 
             try:
-                campaign.name = name
                 campaign.status = user_status
                 campaign.budget = budget
                 campaign.bid_amount = bid_amount
@@ -220,8 +240,8 @@ class updateCampaign(Resource):
 
                 db.session.commit()
                 return errConfig.statusCode("Update campaign successfully!",200)
-            except:
-                return errConfig.statusCode("Update campaign failed!",400)
+            except Exception as e:
+                return errConfig.statusCode(f"Update campaign failed!{str(e)}",400)
         except Exception as e:
             return errConfig.statusCode(str(e), 500)
 

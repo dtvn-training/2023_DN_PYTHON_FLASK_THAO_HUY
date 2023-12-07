@@ -1,8 +1,8 @@
-import json, os,re,jwt
+import json, os,re,jwt,pytz
 import bcrypt
 
 from jwt.exceptions import *
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 
 from dotenv import load_dotenv
 #FLASK
@@ -13,7 +13,7 @@ from flask_restful import Resource, Api
 from auth.auth import authMiddleware
 from auth.authAdmin import authMiddlewareAdmin
 
-from configs.errorStatus import errorStatus
+from config.errorStatus import errorStatus
 from sqlalchemy.orm.exc import NoResultFound
 
 app = Flask(__name__)
@@ -29,23 +29,26 @@ ACCESS_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET")
 
 # Create Refresh Token
 def createRefreshToken(user_id, role_id):
-    exp_time = datetime.now() + timedelta(days = 7)
-    
+    gmt7 = pytz.timezone('Asia/Ho_Chi_Minh')
+
+    exp_time_gmt7 = datetime.now().astimezone(gmt7) + timedelta(days=7)
     payload = {
         "user_id": user_id,
         "role_id": role_id,
-        "exp": exp_time
+        "exp": exp_time_gmt7
     }
     
     return jwt.encode(payload,REFRESH_TOKEN_SECRET,algorithm="HS256")
 # Create Access Token
 def createAccessToken(user_id, role_id):
-    exp_time = datetime.now() + timedelta(minutes=15)
+    gmt7 = pytz.timezone('Asia/Ho_Chi_Minh')
+
+    exp_time_gmt7 = datetime.now().astimezone(gmt7) + timedelta(minutes=15)
     
     payload = {
         "user_id": user_id,
         "role_id": role_id,
-        "exp": exp_time
+        "exp": exp_time_gmt7
     }
     
     return jwt.encode(payload,ACCESS_TOKEN_SECRET,algorithm="HS256")
@@ -75,42 +78,94 @@ class login(Resource):
                 email = json["email"]
                 password = json["password"].encode('utf-8')
                 
+                # REQUIRE
                 if password=="" or email=="":
                     return errConfig.statusCode("Please fill in email/password field!",401)
                 
-                User = Users.query.filter_by(email = email).one()
+                # CHECK INPUT IS STRING
                 
+                if not isinstance(email, str):
+                    return errConfig.statusCode("Email must be a string!",401)
+                if not isinstance(password, bytes):
+                    return errConfig.statusCode("Password must be a string!",401)
+                print("BUG1!")
+                # CHECK VALID EMAIL
+                if not validate_email(email):
+                    return errConfig.statusCode("Invalid email",401)
+                
+                # CHECK LENGTH INPUT
+                
+                if len(email) > 255:
+                    return errConfig.statusCode("Email is over maximum characters",401)
+                if len(password) < 6:
+                    return errConfig.statusCode("Password is over maximum characters",401)
+                
+                # CHECK MATCH EMAIL & PASSWORD IN DB
+                
+                User = Users.query.filter_by(email = email).options(db.defer(Users.password)).one_or_none()
+                user_info = {
+                    "user_id": User.user_id,
+                    "first_name": User.first_name,
+                    "last_name": User.last_name,
+                    "email": User.email,
+                    "avatar": User.avatar,
+                    "role_id": User.role_id,
+                    "address": User.address,
+                    "phone": User.phone,
+                    "delete_flag": User.delete_flag,
+                }
                 checkPW = bcrypt.checkpw(password, User.password.encode('utf-8'))
                 
                 if not checkPW:
                     return errConfig.statusCode("Wrong password!",401)
-                 
-                refresh_token = createRefreshToken(User.user_id, User.role_id)
+                try:
+                    refresh_token = createRefreshToken(User.user_id, User.role_id)
+                    access_token = createAccessToken(User.user_id, User.role_id)
+                    
+                    refreshToken = jwt.decode(refresh_token, REFRESH_TOKEN_SECRET, algorithms=["HS256"])
+                    accessToken = jwt.decode(access_token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
+                    
+                    refreshTokenEXP = refreshToken['exp']
+                    accessTokenEXP = accessToken['exp']
+                    
+                    # resSuccess = errConfig.statusCode("Login successful!",200)
                 
-                response = errConfig.statusCode("Login successful!")
-                response.set_cookie('RefreshToken', refresh_token, max_age=7 * 24 * 60 * 60, path='/api/refresh_token', httponly=True) # Max_age is seconds not miliseconds.
-                
-                return response
-
+                    return {"msg":"Login successful!",
+                            "refresh_token":refresh_token,
+                            "access_token":access_token,
+                            "refresh_exp": refreshTokenEXP,
+                            "access_exp": accessTokenEXP,
+                            "user_info":user_info
+                            }
+                except Exception as e:
+                    return errConfig.statusCode(f'Error msg: {str(e)}',401)
             else: return "Content-Type not support!"
         except NoResultFound:
             return errConfig.statusCode('Email is not exist!',401)
         except Exception as e :
-            return errConfig.statusCode(str(e),500)
+            return errConfig.statusCode(str(e),400)
 # Get ACCESS_TOKEN
 class getAccessToken(Resource):
     def post(self):
         from initSQL import db
                 
         from models.userModel import Users
+        
         try:
-            refresh_token = request.cookies.get('RefreshToken')
+            json = request.get_json()
+            refresh_token = json['refresh_token']
             
             user = jwt.decode(refresh_token, REFRESH_TOKEN_SECRET, algorithms=["HS256"])
             user_id = user['user_id']
+            print(user_id)
+            refreshEXP = user['exp']
+            datetime_object_gmt7 = datetime.fromtimestamp(refreshEXP, tz=pytz.timezone('Asia/Ho_Chi_Minh'))
             
-            User = Users.query.filter_by(user_id = user_id).one_or_404()
-            
+            currentTime = datetime.now(pytz.timezone('Asia/Ho_Chi_Minh'))
+
+            User = Users.query.filter_by(user_id = user_id).one()
+            if datetime_object_gmt7 < currentTime:
+                return errConfig.statusCode("Expired refresh token",403)
             
             if not refresh_token:
                 return errConfig.statusCode("Please login again!",401)
@@ -119,10 +174,9 @@ class getAccessToken(Resource):
                 jwt.decode(refresh_token,REFRESH_TOKEN_SECRET,"HS256")
 
                 access_token = createAccessToken(User.user_id,User.role_id)
-
-                # return errConfig.msgFeedback(access_token)
-                return access_token
-
+                access_token_decode = jwt.decode(access_token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
+                access_token_exp = access_token_decode['exp']
+                return {"new_acc_token":access_token, "access_token_exp":access_token_exp}
             except InvalidTokenError:
                 return errConfig.statusCode("Invalid token",401)
             except DecodeError:
@@ -141,7 +195,7 @@ class getUser(Resource):
     def get(self):
         from initSQL import db
         from models.userModel import Users
-        
+
         token = request.headers.get("Authorization")
         if not token:
             return errorStatus.statusCode("Invalid Authentication.", 400)
@@ -158,7 +212,7 @@ class getUser(Resource):
 # GET ALL USER INFO
 class getAllUser(Resource):
     @authMiddleware
-    @authMiddlewareAdmin
+    # @authMiddlewareAdmin
     def get(self):
         from initSQL import db
         from models.userModel import Users
@@ -166,13 +220,16 @@ class getAllUser(Resource):
         users = Users.query.options(db.defer(Users.password)).all()
         # Users = db.session.execute(db.select(User).order_by(User.user_id).options(db.defer(User.password))).all()
         tuple_user = [{'user_id': user.user_id,
+                       'role_id': user.role_id,
                        'first_name': user.first_name, 
                        'last_name': user.last_name,
-                       'email': user.email, 
+                       'email': user.email,
+                       'address': user.address,
+                       'phone': user.phone,
                        'create_at': user.create_at,
                        'update_at': user.update_at,
-                       'image': user.image,
-                       'role_id': user.role_id} 
+                       'image': user.avatar,
+                       } 
                     for user in users]
 
         return jsonify(users=tuple_user)
@@ -189,23 +246,22 @@ class logout(Resource):
 class deleteUser(Resource):
     @authMiddleware
     @authMiddlewareAdmin
-    def delete(self):
+    def post(self):
         from initSQL import db
         from models.userModel import Users
+        
         try:
-            access_token = request.header.get('Authorization')
-            
-            user = jwt.decode(refresh_token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
-            user_id = user['user_id']
-            
-            User = Users.query.filter_by(user_id = user_id).one_or_404()
-            if User:
+            content_type = request.headers.get('Content-Type')
+            if content_type == "application/json":
+                json = request.get_json()
+                user_id = json['user_id']
+
+                User = Users.query.filter_by(user_id = user_id).first()
+                
                 db.session.delete(User)
                 db.session.commit()
+                
                 return errConfig.statusCode("Delete User successfully!")
-            else:
-                return errConfig.statusDefault(5)
-            
         except Exception as e:
             # return errConfig.statusDefault(4)
             return errConfig.statusCode(str(e),500)
@@ -216,6 +272,7 @@ class addUser(Resource):
     def post(self):
         from initSQL import db
         from models.userModel import Users
+
         try:
             json = request.get_json()
             email = json['email']
@@ -225,10 +282,8 @@ class addUser(Resource):
             address = json['address']
             phone = json['phone']
             password = json['password'].encode('utf-8')
-            
-            
-            
-            if not validate_email:
+
+            if not validate_email(email):
                 return errConfig.statusCode("Invalid email",400)
             
             if find_user_by_email(email):
@@ -248,37 +303,37 @@ class addUser(Resource):
 # UPDATE USER
 class updateUser(Resource):
     @authMiddleware
+    @authMiddlewareAdmin
     def put(self):
         from initSQL import db
         from models.userModel import Users
-
-        token = request.headers.get("Authorization")
-        if not token:
-            return errorStatus.statusCode("Invalid Authentication.", 400)
+        
         try:
-            json = request.get_json()
-            email = json['email']
-            first_name = json['first_name']
-            last_name = json['last_name']
-            role_id = json['role_id']
-            address = json['address']
-            phone = json['phone']
-            
-            user = jwt.decode(token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
-            user_id = user['user_id']
-            
-            user_to_update = Users.query.filter_by(id=user_id).first()
-            
-            user_updated = Users(id=user_id, email=email, first_name=first_name, last_name=last_name,role_id=role_id,address=address,phone=phone)
-            db.session.merge(user_updated)
-            db.session.commit()
-            return errConfig.statusCode('Update user successfully!')
+            content_type = request.headers.get('Content-Type')
+            if content_type == "application/json":
+                data_acc = request.json.get('dataAcc', {})  # Lấy giá trị của khóa 'dataAcc' hoặc trả về một từ điển trống nếu không tồn tại
+                print(data_acc)
+                address = data_acc.get('address')
+                first_name = data_acc.get('first_name')
+                last_name = data_acc.get('last_name')
+                phone = data_acc.get('phone')
+                role_id = data_acc.get('role_id')
+                user_id = data_acc.get('user_id')
+                
+                user = Users.query.filter_by(user_id=user_id).one()
+                user.address = address
+                user.first_name = first_name
+                user.last_name = last_name
+                user.phone = phone
+                user.role_id = role_id    
+                
+                db.session.commit()
+                
+                return errConfig.statusCode('Update user successfully!')
         except Exception as e:
-            return errConfig.statusCode(str(e),500)
-
+            return errConfig.statusCode(str(e),401)
 # DELETE ALL USERS
 class deleteAllUser(Resource):
-    @authMiddleware
     @authMiddlewareAdmin
     def delete(self):
         from initSQL import db
