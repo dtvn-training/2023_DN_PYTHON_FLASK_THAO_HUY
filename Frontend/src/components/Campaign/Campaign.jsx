@@ -103,13 +103,15 @@ const Campaign = () => {
           </div>
         </div>
         <div className="camp-search-container">
-          <input
+          <div>
+            <input
             type="text"
             id="search-bar"
             onBlur={handleSearch}
             ref={searchRef}
             placeholder="Search"
           />
+          </div>
           <div className="camp-func-btn-container">
             <CSVLink
               type="button"

@@ -62,3 +62,22 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+
+@media screen and (max-width: 1408px) {
+  .account {
+    padding: 88px 40px;
+  }
+
+  .acc-search-container {
+    #search-bar {
+      padding: 10px;
+      width: 200px;
+    }
+  }
+
+  .acc-button {
+  padding: 12px;
+  font-size: 12.5px;
+  }
+}

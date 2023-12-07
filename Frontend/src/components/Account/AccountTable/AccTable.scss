@@ -44,3 +44,18 @@
   justify-content: center;
   padding-top: 20px;
 }
+
+@media screen and (max-width: 1408px) {
+  .acc-table-data {
+    table {
+      th {
+        border: 2px solid black;
+        color: white;
+        height: 46px;
+        font-weight: 500;
+      }
+    }
+  }
+  
+}
+

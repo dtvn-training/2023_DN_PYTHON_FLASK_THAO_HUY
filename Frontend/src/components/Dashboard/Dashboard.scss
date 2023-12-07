@@ -16,6 +16,9 @@
     width: 250px;
     font-size: medium;
   }
+  .data-search-sub {
+    margin-bottom: 47px;
+  }
   #startDateTimePicker {
     position: absolute;
     right: 440px;
@@ -46,4 +49,25 @@
     font-weight: 500;
     margin: 5px 10px 0px 10px;
   }
+}
+
+
+@media screen and (max-width: 1485px) {
+  .dash-search-container {
+    display: block;
+    input {
+      position: absolute;
+    }
+    .dash-input-search {
+      margin-top: 150px;
+    }
+
+    .data-search-sub {
+      // position: absolute;
+    }
+  }
+}
+
+@media screen and (max-width: 1485px) {
+  
 }

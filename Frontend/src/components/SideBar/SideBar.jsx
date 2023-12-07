@@ -50,7 +50,7 @@ const SideBar = (props) => {
       </div>
       <div
         className={
-          activeItem === OPEN_ACCOUNT ? "highlight-item-side" : "item-side"
+          activeItem === OPEN_ACCOUNT ? "highlight-item-side" : "item-side item-side-sub"
         }
         onClick={() => clickChange(OPEN_ACCOUNT)}
       >

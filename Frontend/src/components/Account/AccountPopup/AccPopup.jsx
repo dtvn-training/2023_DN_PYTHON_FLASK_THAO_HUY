@@ -164,7 +164,7 @@ const AccPopup = (props) => {
             />
           </div>
           <div className="acc-text-input">
-            Confirm password:
+            <div className="acc-text-confirm">Confirm password:</div>
             <input
               value={formData.confirm_password}
               onChange={handleChange}

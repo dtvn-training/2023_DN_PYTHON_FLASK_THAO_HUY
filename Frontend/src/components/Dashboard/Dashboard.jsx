@@ -72,27 +72,29 @@ const Dashboard = (props) => {
             ref={searchRef}
             placeholder="Search"
           />
-          <label id="label-start-time" htmlFor="startDateTimePicker">
+          <div className="data-search-sub">
+            <label id="label-start-time" htmlFor="startDateTimePicker">
             Start Time:
-          </label>
-          <input
-            type="datetime-local"
-            id="startDateTimePicker"
-            name="startDateTimePicker"
-            value={startTime}
-            onChange={handleStartTimeChange}
-          ></input>
-          <label id="label-end-time" htmlFor="endDateTimePicker">
-            End Time:
-          </label>
-          <input
-            className="endtime"
-            type="datetime-local"
-            id="endDateTimePicker"
-            name="endDateTimePicker"
-            value={endTime}
-            onChange={handleEndTimeChange}
-          ></input>
+            </label>
+            <input
+              type="datetime-local"
+              id="startDateTimePicker"
+              name="startDateTimePicker"
+              value={startTime}
+              onChange={handleStartTimeChange}
+            ></input>
+            <label id="label-end-time" htmlFor="endDateTimePicker">
+              End Time:
+            </label>
+            <input
+              className="endtime"
+              type="datetime-local"
+              id="endDateTimePicker"
+              name="endDateTimePicker"
+              value={endTime}
+              onChange={handleEndTimeChange}
+            ></input>
+          </div>
         </div>
       </div>
       {data && <DashboardTable data={data} />}
