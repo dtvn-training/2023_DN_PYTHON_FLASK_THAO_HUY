@@ -1,14 +1,15 @@
 .account {
   width: 100%;
-  padding: 138px 50px;
+  padding: 75px 50px;
   overflow: auto;
 }
 
 .acc-filter-bar {
   display: flex;
   flex-direction: row;
-  margin-bottom: 20px;
+  margin-bottom: 56px;
   justify-content: space-between;
+  margin-top: 25px;
 }
 
 .acc-search-container {
@@ -26,26 +27,6 @@
   font-weight: bold;
 }
 
-// .acc-func-btn{
-//   .acc-export-btn{
-//     background-color: #468faf;
-//     color: white;
-//     border: None;
-//     padding: 10px;
-//     border-radius: 5px;
-//     margin-right: 5px;
-//     text-decoration: none;
-//   }
-//     button{
-//       background-color: #468faf;
-//       color: white;
-//       border: None;
-//       padding: 10px;
-//       border-radius: 5px;
-//       margin-right: 5px;
-//       font-size: 17px;
-//     }
-// }
 .acc-export-btn {
   margin-right: 10px;
 }
@@ -66,7 +47,7 @@
 
 @media screen and (max-width: 1408px) {
   .account {
-    padding: 88px 40px;
+    padding: 88px 50px;
   }
 
   .acc-search-container {

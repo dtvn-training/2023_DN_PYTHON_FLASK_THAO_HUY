@@ -1,6 +1,7 @@
 .camp-datetime {
   display: flex;
-  padding: 80px 50px 20px 50px;
+  padding-bottom: 23px;
+  padding-top: 20px;
   .starttime-container {
     // grid-area: starttime;
     input {
@@ -35,7 +36,7 @@
   justify-content: space-between;
   display: flex;
   flex-direction: row;
-  padding: 10px 50px 20px 50px;
+  padding: 10px 0px 46px 0px;
   #search-bar {
     padding: 15px;
     width: 250px;
@@ -68,6 +69,7 @@
   overflow: auto;
   width: 100%;
   gap: 20px; 
+  padding: 8px 50px 0px 50px;
 }
 
 .camp-nodata-text {
@@ -78,7 +80,10 @@
 }
 
 @media screen and (max-width: 1408px) {
-
+  .camp-button {
+    padding: 12px;
+    font-size: 12.5px;
+  }
 }
 
 @media screen and (max-width: 1024px) {

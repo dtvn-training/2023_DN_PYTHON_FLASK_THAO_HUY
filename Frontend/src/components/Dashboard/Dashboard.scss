@@ -2,6 +2,7 @@
   overflow: auto;
   width: 100%;
   gap: 20px;
+  padding: 8px 50px;
 }
 
 .dash-search-container {
@@ -9,7 +10,8 @@
   position: relative;
   direction: flex;
   flex-direction: row;
-  padding: 30px 50px 20px 50px;
+  margin-top: 12px;
+  margin-bottom: 75px;
   align-items: center;
   input {
     padding: 15px;
@@ -54,20 +56,30 @@
 
 @media screen and (max-width: 1485px) {
   .dash-search-container {
-    display: block;
-    input {
+    // display: block;
+    #search-bar {
       position: absolute;
+      margin-top: 82px;
+      margin-bottom: 5px;
     }
     .dash-input-search {
       margin-top: 150px;
     }
 
     .data-search-sub {
-      // position: absolute;
+      display: flex;
+      // padding: 80px 50px 20px 50px;
+      margin-bottom: 125px;
     }
+
   }
 }
 
-@media screen and (max-width: 1485px) {
-  
+@media screen and (max-width: 1024px) {
+  .dash-search-container {
+    #search-bar {
+      width: 200px;
+      padding: 10px;
+    }
+  }
 }
