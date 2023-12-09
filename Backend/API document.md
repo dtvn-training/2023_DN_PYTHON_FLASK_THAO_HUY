@@ -592,6 +592,7 @@
   ```
   '200' = {
     msg: "Update campaign successfully!"
+    msg: "Please provide the URL"
   }
   '400' = {
   		'msg': 'Invalid date',
@@ -599,6 +600,8 @@
       'msg': 'Invalid title. Please re-enter',
       'msg': 'Invalid. Please re-enter',
       'msg': 'Update campaign failed!',
+      'msg': 'Invalid URL'
+      'msg': 'Invalid status. Please re-enter'
     }
   ```
   - ### **Error Handling:**
@@ -607,10 +610,11 @@
   '400' = {
   		'msg': 'Invalid Authentication!'
       'msg': 'Invalid date',
-      'msg': 'Invalid name. Please re-enter',
       'msg': 'Invalid title. Please re-enter',
       'msg': 'Invalid. Please re-enter',
       'msg': 'Update campaign failed!'
+      'msg': 'Invalid URL'
+      'msg': 'Invalid status. Please re-enter'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
@@ -634,7 +638,7 @@
     "title": "haizzz",
     "description": "help me",
     "img_preview": "hrhshseh",
-    "final_url": "tjthhh"
+    "final_url": "http://localhost:3000"
   }
  Reponse :
   {
@@ -662,6 +666,8 @@
   ```
   '200' = {
     msg: "Add campaign successfully!"
+    msg: "Please provide the URL"
+
   }
   '400' = {
   		'msg': 'Invalid date',
@@ -669,6 +675,9 @@
       'msg': 'Invalid title. Please re-enter',
       'msg': 'Invalid. Please re-enter',
       'msg': 'Add campaign failed!'
+      'msg': 'Invalid URL'
+      'msg': 'Invalid status. Please re-enter'
+
     }
   ```
   - ### **Error Handling:**
@@ -681,6 +690,8 @@
       'msg': 'Invalid title. Please re-enter',
       'msg': 'Invalid. Please re-enter',
       'msg': 'Add campaign failed!'
+      'msg': 'Invalid URL'
+      'msg': 'Invalid status. Please re-enter'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
@@ -789,6 +800,7 @@
     }
   '400' = {
   		'msg': 'Update campaign failed!',
+      'msg': 'Invalid. Please re-enter'
     }
   ```
   - ### **Error Handling:**
@@ -800,6 +812,7 @@
   '400' = {
   		'msg': 'Update campaign failed!',
       'msg': 'Invalid Authentication!'
+      'msg': 'Invalid. Please re-enter'
     }
   '500' = {
   		'msg': 'Unexpected Error!'
