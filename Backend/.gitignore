@@ -1,2 +1,9 @@
 venv
 .env
+
+Backend/src/common/constants/__pycache__/
+Backend/src/common/utils/__pycache__/
+Backend/src/controllers/**/*.cpython-312.pyc
+Backend/src/dao/__pycache__/
+Backend/src/routes/**/*.cpython-312.pyc
+Backend/src/services/__pycache__/
