@@ -2,7 +2,7 @@ import jwt, os
 
 from flask import Flask, request, make_response
 from dotenv import load_dotenv
-from configs.errorStatus import errorStatus
+from config.errorStatus import errorStatus
 
 from functools import wraps
 
