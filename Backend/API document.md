@@ -825,3 +825,70 @@
 }
 
 ```
+
+- ## Get Banner campaign 
+- ### **[POST]/api/get_banner_campaign**
+  > - Summary:  Get banner by status, bid_amount
+  > - Header (Authorization): AccessToken[Payload]
+  > - Accessible: User, Admin
+  - ### **Request HEADER:**
+  ```
+  {
+    'Authorization': 'Access Token',
+  }
+  ```
+  - ### **Responses:**
+  ```
+  '200' = {
+    "name",
+    "user_status",
+    "bid_amount",
+    "campaign_id"
+  }
+  '404' = {
+      'msg': 'Campaign not found'
+    }
+  ```
+  - ### **Error Handling:**
+  ```
+  {
+  '404' = {
+      'msg': 'Invalid campaign ID'
+      'msg': 'Campaign not found'
+    }
+  '400' = {
+      'msg': 'Invalid Authentication!'
+    }
+  '500' = {
+  		'msg': 'Unexpected Error!'
+    }
+  }
+  ```
+  - ### **Example:**
+ ```
+ URL :  {{domain}}/api/get_banner_campaign
+ Reponse :
+ {
+    "campaigns": [
+        {
+            "bid_amount": 1000,
+            "campaign_id": 3,
+            "name": "abc",
+            "user_status": true
+        },
+        {
+            "bid_amount": 500,
+            "campaign_id": 5,
+            "name": "abc",
+            "user_status": true
+        },
+        {
+            "bid_amount": 100,
+            "campaign_id": 4,
+            "name": "abc",
+            "user_status": true
+        }
+    ]
+}
+
+```
