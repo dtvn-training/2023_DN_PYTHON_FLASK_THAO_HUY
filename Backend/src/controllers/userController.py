@@ -80,29 +80,31 @@ class login(Resource):
                 
                 # REQUIRE
                 if password=="" or email=="":
-                    return errConfig.statusCode("Please fill in email/password field!",401)
+                    return errConfig.msgFeedback("Please fill in email/password field!","",400)
                 
                 # CHECK INPUT IS STRING
                 
                 if not isinstance(email, str):
-                    return errConfig.statusCode("Email must be a string!",401)
+                    return errConfig.msgFeedback("Email must be a string!","",400)
+                
                 if not isinstance(password, bytes):
-                    return errConfig.statusCode("Password must be a string!",401)
-                print("BUG1!")
+                    return errConfig.msgFeedback("Password must be a string!","",400)
+                
                 # CHECK VALID EMAIL
                 if not validate_email(email):
-                    return errConfig.statusCode("Invalid email",401)
+                    return errConfig.msgFeedback("Invalid email!","",400)
                 
                 # CHECK LENGTH INPUT
                 
                 if len(email) > 255:
-                    return errConfig.statusCode("Email is over maximum characters",401)
+                    return errConfig.msgFeedback("Email is over maximum characters","",400)
                 if len(password) < 6:
-                    return errConfig.statusCode("Password is over maximum characters",401)
+                    return errConfig.msgFeedback("Password is over maximum characters","",400)
                 
                 # CHECK MATCH EMAIL & PASSWORD IN DB
                 
-                User = Users.query.filter_by(email = email).options(db.defer(Users.password)).one_or_none()
+                User = Users.query.filter_by(email = email).options(db.defer(Users.password)).one()
+                
                 user_info = {
                     "user_id": User.user_id,
                     "first_name": User.first_name,
@@ -114,36 +116,39 @@ class login(Resource):
                     "phone": User.phone,
                     "delete_flag": User.delete_flag,
                 }
+
                 checkPW = bcrypt.checkpw(password, User.password.encode('utf-8'))
                 
                 if not checkPW:
-                    return errConfig.statusCode("Wrong password!",401)
-                try:
-                    refresh_token = createRefreshToken(User.user_id, User.role_id)
-                    access_token = createAccessToken(User.user_id, User.role_id)
                     
-                    refreshToken = jwt.decode(refresh_token, REFRESH_TOKEN_SECRET, algorithms=["HS256"])
-                    accessToken = jwt.decode(access_token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
+                    return errConfig.msgFeedback("Wrong password!","",200)
+                # try:
+                refresh_token = createRefreshToken(User.user_id, User.role_id)
+                access_token = createAccessToken(User.user_id, User.role_id)
                     
-                    refreshTokenEXP = refreshToken['exp']
-                    accessTokenEXP = accessToken['exp']
+                refreshToken = jwt.decode(refresh_token, REFRESH_TOKEN_SECRET, algorithms=["HS256"])
+                accessToken = jwt.decode(access_token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
+                
+                refreshTokenEXP = refreshToken['exp']
+                accessTokenEXP = accessToken['exp']
                     
                     # resSuccess = errConfig.statusCode("Login successful!",200)
                 
-                    return {"msg":"Login successful!",
-                            "refresh_token":refresh_token,
-                            "access_token":access_token,
-                            "refresh_exp": refreshTokenEXP,
-                            "access_exp": accessTokenEXP,
-                            "user_info":user_info
-                            }
-                except Exception as e:
-                    return errConfig.statusCode(f'Error msg: {str(e)}',401)
-            else: return "Content-Type not support!"
+                return {"msg":"Login successful!",
+                        "refresh_token":refresh_token,
+                        "access_token":access_token,
+                        "refresh_exp": refreshTokenEXP,
+                        "access_exp": accessTokenEXP,
+                        "user_info":user_info
+                        }
+                # except Exception as e:
+                #     return errConfig.statusCode(f'Error msg: {str(e)}',401)
+            else: 
+                return errConfig.msgFeedback("Content-Type not support!","",400)
         except NoResultFound:
-            return errConfig.statusCode('Email is not exist!',401)
+            return errConfig.msgFeedback({"errorMessage":"Email or password is invalid!"},"",400)
         except Exception as e :
-            return errConfig.statusCode(str(e),400)
+            return errConfig.msgFeedback("Unexpected Error: ",f"{str(e)}",500)
 # Get ACCESS_TOKEN
 class getAccessToken(Resource):
     def post(self):
@@ -165,10 +170,10 @@ class getAccessToken(Resource):
 
             User = Users.query.filter_by(user_id = user_id).one()
             if datetime_object_gmt7 < currentTime:
-                return errConfig.statusCode("Expired refresh token",403)
+                return errConfig.msgFeedback("Expired refresh token","",401)
             
             if not refresh_token:
-                return errConfig.statusCode("Please login again!",401)
+                return errConfig.msgFeedback("Please login again!","",401)
 
             try:
                 jwt.decode(refresh_token,REFRESH_TOKEN_SECRET,"HS256")
@@ -176,19 +181,20 @@ class getAccessToken(Resource):
                 access_token = createAccessToken(User.user_id,User.role_id)
                 access_token_decode = jwt.decode(access_token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
                 access_token_exp = access_token_decode['exp']
+                # role_id = access_token_decode['role_id']
                 return {"new_acc_token":access_token, "access_token_exp":access_token_exp}
             except InvalidTokenError:
-                return errConfig.statusCode("Invalid token",401)
+                return errConfig.msgFeedback("Invalid token","",401)
             except DecodeError:
-                return errConfig.statusCode("Token failed validation",401)
+                return errConfig.msgFeedback("Token failed validation","",401)
             except InvalidSignatureError:
-                return errConfig.statusCode("Invalid refresh token",401)
+                return errConfig.msgFeedback("Invalid refresh token","",401)
             except ExpiredSignatureError:
-                return errConfig.statusCode("The RF token is expired",401)
+                return errConfig.msgFeedback("The RF token is expired","",401)
             except Exception as e:
-                return errConfig.statusCode(f"An unexpected error occurred: {str(e)}",500)
+                return errConfig.msgFeedback("An unexpected error occurred decode refresh token: ",f"{str(e)}",500)
         except Exception as e:
-            return errConfig.statusCode(str(e),500)
+            return errConfig.msgFeedback("Unexpected Error: ",f"{str(e)}",500)
 # GET USER INFOR
 class getUser(Resource):
     @authMiddleware
@@ -198,7 +204,7 @@ class getUser(Resource):
 
         token = request.headers.get("Authorization")
         if not token:
-            return errorStatus.statusCode("Invalid Authentication.", 400)
+            return errorStatus.msgFeedback("Invalid Authentication.","", 400)
 
         user = jwt.decode(token, ACCESS_TOKEN_SECRET, algorithms=["HS256"])
         user_id = user['user_id']
@@ -217,22 +223,63 @@ class getAllUser(Resource):
         from initSQL import db
         from models.userModel import Users
         
-        users = Users.query.options(db.defer(Users.password)).all()
-        # Users = db.session.execute(db.select(User).order_by(User.user_id).options(db.defer(User.password))).all()
-        tuple_user = [{'user_id': user.user_id,
-                       'role_id': user.role_id,
-                       'first_name': user.first_name, 
-                       'last_name': user.last_name,
-                       'email': user.email,
-                       'address': user.address,
-                       'phone': user.phone,
-                       'create_at': user.create_at,
-                       'update_at': user.update_at,
-                       'image': user.avatar,
-                       } 
-                    for user in users]
-
-        return jsonify(users=tuple_user)
+        try:
+            key_word = request.args.get('key_word')
+            page_number = int(request.args.get('page_number', 1))
+            
+            if key_word is None:
+                key_word = ""
+            
+            limit_number_records = 3
+            offset = (page_number - 1) * limit_number_records
+            
+            if not isinstance(page_number, int) or page_number < 1:
+                return errConfig.msgFeedback("",{"page_number": ["Invalid page number"]},400)
+            all_user_data = []
+            
+            query = Users.query.filter(
+                Users.delete_flag == 0,
+            ).options(db.defer(Users.password))
+            
+            if key_word == "ALL":
+                user_list = query.limit(limit_number_records).offset(offset).all()
+                total_records = query.count()
+                print(user_list)
+            else:
+                user_filtered = query.filter(Users.first_name.like(f"%{key_word}%"))
+                user_list = query.filter(Users.first_name.like(f"%{key_word}%")).limit(limit_number_records).offset(offset).all()
+                total_records = user_filtered.count()
+                
+                
+            if user_list:
+                tuple_user = [{'user_id': user.user_id,
+                        'role_id': user.role_id,
+                        'first_name': user.first_name, 
+                        'last_name': user.last_name,
+                        'email': user.email,
+                        'address': user.address,
+                        'phone': user.phone,
+                        'create_at': user.create_at,
+                        'update_at': user.update_at,
+                        'image': user.avatar,
+                        } 
+                        for user in user_list]
+                all_user_data.append(tuple_user)
+                return errConfig.msgFeedback({
+                    "user_list": all_user_data,
+                    "total_records": total_records,
+                    "page_number": page_number,
+                    "limit_number_records": limit_number_records
+                },"",200) 
+            else:
+                return errConfig.msgFeedback({
+                    "campaign_list": [],
+                    "total_records": 0,
+                    "page_number": page_number,
+                    "limit_number_records": limit_number_records
+                },"No Campaign found!",200)
+        except Exception as  e:
+            return errConfig.msgFeedback("Unexpected Error: ",f"{str(e)}",200)
 # LOGOUT
 class logout(Resource):
     def get(self):
@@ -257,8 +304,9 @@ class deleteUser(Resource):
                 user_id = json['user_id']
 
                 User = Users.query.filter_by(user_id = user_id).first()
+                User.delete_flag = 1;
                 
-                db.session.delete(User)
+                # db.session.delete(User)
                 db.session.commit()
                 
                 return errConfig.statusCode("Delete User successfully!")
@@ -284,22 +332,22 @@ class addUser(Resource):
             password = json['password'].encode('utf-8')
 
             if not validate_email(email):
-                return errConfig.statusCode("Invalid email",400)
+                return errConfig.msgFeedback("Invalid email","",200)
             
             if find_user_by_email(email):
-                return errConfig.statusCode("Email already in exist",400)
+                return errConfig.msgFeedback("Email already in exist","",200)
                                             
             if len(password) < 6:
-                return errConfig.statusCode("Password must be at least 6 characters.",400)
+                return errConfig.msgFeedback("Password must be at least 6 characters.","",200)
             
             hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
             
             user = Users(email=email,first_name=first_name,last_name=last_name,role_id=role_id,address=address,phone=phone,password=hashed_password)
             db.session.add(user)
             db.session.commit()
-            return errConfig.statusCode("Add User successfully!")
+            return errConfig.msgFeedback("Add User successfully!","",200)
         except Exception as e:
-            return errConfig.statusCode(str(e),500)
+            return errConfig.statusCode(str(e),400)
 # UPDATE USER
 class updateUser(Resource):
     @authMiddleware
@@ -344,3 +392,4 @@ class deleteAllUser(Resource):
             return errConfig.statusCode('Delete all users successfully!')
         except Exception as e:
             return errConfig.statusCode(str(e),500)
+

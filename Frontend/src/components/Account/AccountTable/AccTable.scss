@@ -1,0 +1,63 @@
+.acc-table-data {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  table {
+    border: 2px solid rgb(0, 0, 0);
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    overflow: auto;
+    th {
+      border: 2px solid black;
+      background-color: #468faf;
+      color: white;
+      text-align: center;
+      height: 50px;
+    }
+
+    td {
+      text-align: center;
+      border: 2px solid black;
+      padding: 10px;
+      max-width: 250px;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      img {
+        padding-right: 10px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+    .valid {
+      color: green;
+    }
+    .invalid {
+      color: red;
+    }
+  }
+
+  .btn {
+    margin: 0px 10px 0px 10px;
+  }
+}
+.pagination-container {
+  justify-content: center;
+  padding-top: 20px;
+}
+
+@media screen and (max-width: 1408px) {
+  .acc-table-data {
+    table {
+      th {
+        border: 2px solid black;
+        color: white;
+        height: 46px;
+        font-weight: 500;
+      }
+    }
+  }
+}

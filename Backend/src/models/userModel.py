@@ -20,7 +20,7 @@ class Users(db.Model):
   last_name = db.Column(db.VARCHAR(120), nullable = False)
   role_id = db.Column(db.Enum('ADMIN','DAC','ADVERTISER'), db.ForeignKey('roles.role_id'), nullable=False, default='ADMIN')
   address = db.Column(db.VARCHAR(255), nullable = False)
-  phone = db.Column(db.VARCHAR(11), nullable = False, unique = True)
+  phone = db.Column(db.VARCHAR(11), nullable = False)
   avatar = db.Column(db.NVARCHAR(255), default="https://res.cloudinary.com/dooge27kv/image/upload/v1667982724/project/avatar.png")
   actions = db.Column(db.VARCHAR(150), nullable = True)
   create_at = db.Column(db.TIMESTAMP, default=datetime.now())
@@ -30,7 +30,7 @@ class Users(db.Model):
   role = db.relationship('Roles', backref=db.backref('users'), lazy=True)
     
   def __init__(self,email, first_name, last_name,role_id,address,phone,password):
-    self.user_id = str(uuid.uuid4())
+
     self.email = email
     self.first_name = first_name
     self.last_name = last_name
