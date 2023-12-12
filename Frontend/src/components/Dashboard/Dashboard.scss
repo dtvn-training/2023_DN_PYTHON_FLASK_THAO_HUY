@@ -2,48 +2,49 @@
   overflow: auto;
   width: 100%;
   gap: 20px;
+  ul {
+    padding: 0;
+    margin-left: 50.5rem;
+  }
 }
 
 .dash-search-container {
   display: flex;
-  position: relative;
-  direction: flex;
-  flex-direction: row;
-  padding: 30px 50px 20px 50px;
+  padding: 10px 20px 20px 47px;
   align-items: center;
-  input {
+  #search-bar {
     padding: 15px;
     width: 250px;
     font-size: medium;
+    margin-right: 514px;
   }
-  #startDateTimePicker {
-    position: absolute;
-    right: 440px;
-    border: none;
-    border-bottom: 1px solid #9e9e9e;
-    padding: 10px;
-    font-size: medium;
-    font-family: "Arial", sans-serif;
+  .dash-datetime {
+    display: flex;
   }
-  #endDateTimePicker {
-    position: absolute;
-    right: 50px;
-    border: none;
-    border-bottom: 1px solid #9e9e9e;
-    padding: 10px;
-    font-size: medium;
-    font-family: "Arial", sans-serif;
+  .starttime-container {
+    input {
+      border: none;
+      border-bottom: 1px solid #9e9e9e;
+      padding: 10px;
+      font-size: medium;
+      font-family: "Arial", sans-serif;
+    }
+    label {
+      font-weight: 500;
+      margin: 0px 10px 0px 0px;
+    }
   }
-  #label-start-time {
-    position: absolute;
-    right: 720px;
-    font-weight: 500;
-    margin: 5px 10px 0px 10px;
-  }
-  #label-end-time {
-    position: absolute;
-    right: 325px;
-    font-weight: 500;
-    margin: 5px 10px 0px 10px;
+  .endtime-container {
+    input {
+      border: none;
+      border-bottom: 1px solid #9e9e9e;
+      padding: 10px;
+      font-size: medium;
+      font-family: "Arial", sans-serif;
+    }
+    label {
+      font-weight: 500;
+      margin: 0px 10px 0px 10px;
+    }
   }
 }

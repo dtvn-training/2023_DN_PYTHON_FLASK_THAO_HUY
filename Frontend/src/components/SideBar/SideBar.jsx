@@ -7,7 +7,6 @@ import {
   OPEN_DASHBOARD,
 } from "../../containers/menuContainer";
 import { TbCategory } from "react-icons/tb";
-
 const SideBar = (props) => {
   const currentUser = useSelector((state) => state.auth?.currentUser);
   const { activeItem } = props;

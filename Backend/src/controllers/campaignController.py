@@ -77,7 +77,7 @@ class getAllCampaign(Resource):
                 campaign_filtered = query.filter(Campaigns.name.like(f"%{key_word}%"))
                 campaign_list = query.filter(Campaigns.name.like(f"%{key_word}%")).limit(limit_number_records).offset(offset).all()
                 total_records = campaign_filtered.count()
-            
+
             if campaign_list:
                 for campaign in campaign_list:
                     creatives = Creatives.query.filter_by(campaign_id=campaign.campaign_id).all()
@@ -121,7 +121,7 @@ class getAllCampaign(Resource):
                     "page_number": page_number,
                     "limit_number_records": limit_number_records
                 },"",200)
-            
+
             else:
                 return errConfig.msgFeedback({
                     "campaign_list": [],
