@@ -7,7 +7,6 @@ import {
 } from "../../containers/menuContainer";
 import React from "react";
 import { TbCategory } from "react-icons/tb";
-
 const SideBar = (props) => {
   const currentUser = useSelector((state) => state.auth?.currentUser);
   const { activeItem } = props;

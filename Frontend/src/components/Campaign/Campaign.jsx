@@ -21,7 +21,6 @@ const Campaign = () => {
   const api = useAxios();
   const dispatch = useDispatch();
   const listCampaigns = useSelector((state) => state.campaign.listCampaigns);
-
   const totalRecords = useSelector((state) => state.campaign.totalRecords);
   const pageCount = Math.ceil(totalRecords / 3);
 
