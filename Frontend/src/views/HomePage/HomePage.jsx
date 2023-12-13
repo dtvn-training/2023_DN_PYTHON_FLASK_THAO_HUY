@@ -50,6 +50,7 @@ const HomePage = () => {
           clickSideBar={clickSideBar}
           activeItem={openMenu}
         />
+
         {openMenu === OPEN_ACCOUNT && <Account />}
         {openMenu === OPEN_CAMPAIGN && <Campaign />}
         {openMenu === OPEN_DASHBOARD && <Dashboard />}

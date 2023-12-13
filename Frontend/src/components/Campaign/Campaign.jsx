@@ -7,6 +7,8 @@ import moment from "moment";
 import { CSVLink } from "react-csv";
 import CampaignTable from "./CampaignTable/CampaignTable";
 import CreateCampaign from "./CreateCampaign/CreateCampaign";
+import CampaignImage from "../../components/Campaign/CampaignImage/CampaignImage";
+
 import { fetchListCampaignAction } from "../../store/actions/campaignActions";
 import useAxios from "../../utils/useAxios";
 
@@ -164,6 +166,7 @@ const Campaign = () => {
       ) : (
         <div className="camp-nodata-text">NO CAMPAIGN FOUND</div>
       )}
+      <CampaignImage />
       {isOpenPopup && (
         <CreateCampaign
           changePopup={changePopup}

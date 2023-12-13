@@ -12,8 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 // import AccountServices from "./services/AccountServices";
 import Loading from "./components/Loading/Loading";
-// import HomePage from "./views/HomePage/HomePage";
-// import LoginPage from "./views/LoginPage/LoginPage";
 
 const LazyLoginPage = lazy(() => import("./views/LoginPage/LoginPage"));
 const LazyHomePage = lazy(() => import("./views/HomePage/HomePage"));
@@ -21,25 +19,10 @@ const LazyHomePage = lazy(() => import("./views/HomePage/HomePage"));
 
 function App() {
   return (
-    // <BrowserRouter>
-    //     <Routes>
-    //       {
-    //         <Route
-    //           path="/"
-    //           element={firstLogin ? <LazyHomePage /> : <Navigate to="/login" />}
-    //         />
-    //       }
-    //       {
-    //         <Route
-    //           path="/login"
-    //           element={firstLogin ? <Navigate to="/" /> : <LazyLoginPage />}
-    //         />
-    //       }
-    //     </Routes>
-    // </BrowserRouter>
     <>
       <div className="App">
-        <Suspense fallback={<Loading />}>
+        <Loading />
+        <Suspense fallback={"loading..."}>
           <Routes>
             <Route exact path="/" element={<PrivateRoute />}>
               <Route exact path="/" element={<LazyHomePage />} />
