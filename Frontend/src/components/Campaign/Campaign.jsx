@@ -125,12 +125,14 @@ const Campaign = () => {
           </div>
         </div>
         <div className="camp-search-container">
-          <input
-            type="search"
-            placeholder="Search"
-            id="search-bar"
-            onInput={(e) => handleChangeSearchByKeyWord(e)}
-          />
+          <div>
+            <input
+              type="search"
+              placeholder="Search"
+              id="search-bar"
+              onInput={(e) => handleChangeSearchByKeyWord(e)}
+            />
+          </div>
           <div className="camp-func-btn-container">
             <CSVLink
               type="button"

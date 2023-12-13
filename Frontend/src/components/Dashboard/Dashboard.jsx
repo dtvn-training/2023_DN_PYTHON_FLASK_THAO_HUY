@@ -7,10 +7,8 @@ import DashboardTable from "./DashboardTable/DashboardTable";
 const Dashboard = (props) => {
   const searchRef = useRef();
   const [dataSearch, setDataSearch] = useState({ search: null });
-
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
-
   const [isReload, setReload] = useState(true); // set Callback
   const [data, setData] = useState([]);
 
@@ -62,8 +60,8 @@ const Dashboard = (props) => {
   return (
     <div className="dash-grid">
       {/* {err && showErrMsg(err)}
-  {success && showSuccessMsg(success)}
-  {loading && <h3>Loading.....</h3>} */}
+      {success && showSuccessMsg(success)}
+      {loading && <h3>Loading.....</h3>} */}
 
       <div className="dash-filter-bar">
         <div className="dash-search-container">
@@ -74,27 +72,33 @@ const Dashboard = (props) => {
             ref={searchRef}
             placeholder="Search"
           />
-          <label id="label-start-time" htmlFor="startDateTimePicker">
-            Start Time:
-          </label>
-          <input
-            type="datetime-local"
-            id="startDateTimePicker"
-            name="startDateTimePicker"
-            value={startTime}
-            onChange={handleStartTimeChange}
-          ></input>
-          <label id="label-end-time" htmlFor="endDateTimePicker">
-            End Time:
-          </label>
-          <input
-            className="endtime"
-            type="datetime-local"
-            id="endDateTimePicker"
-            name="endDateTimePicker"
-            value={endTime}
-            onChange={handleEndTimeChange}
-          ></input>
+          <div className="data-search-sub">
+            <div className="starttime-container">
+              <label id="label-start-time" htmlFor="startDateTimePicker">
+                Start Time:
+              </label>
+              <input
+                type="datetime-local"
+                id="startDateTimePicker"
+                name="startDateTimePicker"
+                value={startTime}
+                onChange={handleStartTimeChange}
+              ></input>
+            </div>
+            <div className="endtime-container">
+              <label id="label-end-time" htmlFor="endDateTimePicker">
+                End Time:
+              </label>
+              <input
+                className="endtime"
+                type="datetime-local"
+                id="endDateTimePicker"
+                name="endDateTimePicker"
+                value={endTime}
+                onChange={handleEndTimeChange}
+              ></input>
+            </div>
+          </div>
         </div>
       </div>
       {data && <DashboardTable data={data} />}

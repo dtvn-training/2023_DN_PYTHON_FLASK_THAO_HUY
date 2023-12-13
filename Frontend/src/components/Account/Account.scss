@@ -1,18 +1,20 @@
 .account {
   width: 100%;
-  padding: 138px 50px;
+  padding: 75px 50px;
   overflow: auto;
   .pagination ul {
-    padding: 0;
-    margin-left: 50.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
 .acc-filter-bar {
   display: flex;
   flex-direction: row;
-  margin-bottom: 20px;
+  margin-bottom: 56px;
   justify-content: space-between;
+  margin-top: 25px;
 }
 
 .acc-search-container {
@@ -30,26 +32,6 @@
   font-weight: bold;
 }
 
-// .acc-func-btn{
-//   .acc-export-btn{
-//     background-color: #468faf;
-//     color: white;
-//     border: None;
-//     padding: 10px;
-//     border-radius: 5px;
-//     margin-right: 5px;
-//     text-decoration: none;
-//   }
-//     button{
-//       background-color: #468faf;
-//       color: white;
-//       border: None;
-//       padding: 10px;
-//       border-radius: 5px;
-//       margin-right: 5px;
-//       font-size: 17px;
-//     }
-// }
 .acc-export-btn {
   margin-right: 10px;
 }
@@ -65,4 +47,28 @@
   font-size: 15.5px;
   text-decoration: none;
   cursor: pointer;
+}
+
+.square-fill .is-active, 
+.square-fill a:first-of-type, 
+.square-fill a:last-of-type {
+  background-color: #468faf !important;
+}
+
+@media screen and (max-width: 1408px) {
+  .account {
+    padding: 88px 50px;
+  }
+
+  .acc-search-container {
+    #search-bar {
+      padding: 10px;
+      width: 200px;
+    }
+  }
+
+  .acc-button {
+  padding: 12px;
+  font-size: 12.5px;
+  }
 }

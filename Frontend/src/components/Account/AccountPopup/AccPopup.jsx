@@ -200,7 +200,7 @@ const AccPopup = (props) => {
                   )}
                 </div>
                 <div className="acc-text-input">
-                  Confirm password:
+                  <div className="acc-text-confirm">Confirm password:</div>
                   <input
                     value={formik.values.confirm_password}
                     onChange={formik.handleChange}

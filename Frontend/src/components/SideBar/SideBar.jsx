@@ -1,11 +1,11 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import "./SideBar.scss";
+import { useSelector } from "react-redux";
 import {
   OPEN_ACCOUNT,
   OPEN_CAMPAIGN,
   OPEN_DASHBOARD,
 } from "../../containers/menuContainer";
+import React from "react";
 import { TbCategory } from "react-icons/tb";
 
 const SideBar = (props) => {
@@ -17,17 +17,17 @@ const SideBar = (props) => {
 
   return (
     <div
-      className={`${"sidebar"}
+      className={`${"side-bar"} 
             ${props.show ? "" : "hidden"}`}
     >
       <div className="user-info">
         <div className="logo-user">
-          <img alt="#" src={props.user?.avatar} />
+          <img alt="#" src={props.user.user?.avatar} />
         </div>
         <div className={"name-user"}>
           <p>
-            {props
-              ? props.user?.first_name + " " + props.user?.last_name
+            {props.user
+              ? props.user.user?.first_name + " " + props.user.user?.last_name
               : "Please sign in"}
           </p>
         </div>
@@ -50,16 +50,14 @@ const SideBar = (props) => {
         <TbCategory className="icon-side-bar" />
         Campaign
       </div>
-      <div style={{ display: currentUser.role_id === "ADMIN" ? "" : "none" }}>
-        <div
-          className={
-            activeItem === OPEN_ACCOUNT ? "highlight-item-side" : "item-side"
-          }
-          onClick={() => clickChange(OPEN_ACCOUNT)}
-        >
-          <TbCategory className="icon-side-bar" />
-          Account
-        </div>
+      <div
+        className={
+          activeItem === OPEN_ACCOUNT ? "highlight-item-side" : "item-side item-side-sub"
+        }
+        onClick={() => clickChange(OPEN_ACCOUNT)}
+      >
+        <TbCategory className="icon-side-bar" />
+        Account
       </div>
     </div>
   );

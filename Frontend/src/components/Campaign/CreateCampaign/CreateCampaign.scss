@@ -35,6 +35,7 @@
 
 .camp-schedule-input {
   .camp-starttime-container {
+    display: flex;
     input {
       border: none;
       border-bottom: 1px solid #9e9e9e;
@@ -47,6 +48,8 @@
     }
   }
   .camp-endtime-container {
+    display: flex;
+
     input {
       border: none;
       border-bottom: 1px solid #9e9e9e;
@@ -156,6 +159,7 @@
     border-radius: 6px;
     padding: 53px;
     margin-left: 27px;
+    width: 68%;
   }
   p {
     position: absolute;
@@ -176,7 +180,7 @@
   margin-bottom: 30px;
   margin-top: 30px;
   .status-select {
-    width: 710px;
+    width: 80.5%;
     height: 36px;
     margin-left: 27px;
     border-color: black;
@@ -215,5 +219,22 @@
     top: 80px;
     left: -20px;
     border-bottom: 0.5px solid rgb(184, 184, 184);
+  }
+}
+
+@media screen and (max-width: 678px) {
+  .camp-schedule-input {
+    .camp-starttime-container {
+      label {
+        font-weight: 500;
+        margin: 0px 20px 0px 77px;
+      }
+    }
+  }
+
+  .camp-text-input {
+    .img-preview {
+      width: 66%;
+    }
   }
 }
