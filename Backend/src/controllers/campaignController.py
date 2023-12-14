@@ -6,7 +6,7 @@ from jwt.exceptions import *
 from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
-from sqlalchemy import func
+from sqlalchemy import desc, func
 
 # FLASK
 from flask import Flask, request, make_response, jsonify
@@ -350,3 +350,34 @@ class bannerCampaign(Resource):
                 return errConfig.msgFeedback("Update campaign failed!","",200)
         except Exception as e:
             return errConfig.msgFeedback("Unexpected Error: ",f"{str(e)}",200)
+        
+
+
+class getBannerCampaign(Resource):
+    @authMiddleware
+    @authMiddlewareAdmin
+    def get(self):
+        try:
+            campaigns = (
+                    Campaigns.query.filter_by(user_status=True)
+                    .order_by(desc(Campaigns.bid_amount))
+                    .limit(5)
+                    .all()
+                )
+        
+            if campaigns:
+                tuple_campaign = [
+                    {
+                        "name": campaign.name,
+                        "user_status": campaign.user_status,
+                        "bid_amount": campaign.bid_amount,
+                        "campaign_id": campaign.campaign_id,
+                    }
+                    for campaign in campaigns
+                ]
+                return jsonify(campaigns=tuple_campaign)
+            else:
+                return errConfig.statusCode("Campaign not found", 404)
+        except Exception as e:
+            return errConfig.statusCode(str(e), 500)
+        
