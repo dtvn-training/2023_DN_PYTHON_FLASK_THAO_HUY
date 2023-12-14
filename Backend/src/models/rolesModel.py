@@ -10,4 +10,3 @@ class Roles(db.Model):
     
     def __init__(self, role_id):
         self.role_id = role_id
-

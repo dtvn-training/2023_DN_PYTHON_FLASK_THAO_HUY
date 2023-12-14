@@ -8,7 +8,6 @@ import {
 import React from "react";
 import { TbCategory } from "react-icons/tb";
 const SideBar = (props) => {
-  const currentUser = useSelector((state) => state.auth?.currentUser);
   const { activeItem } = props;
   function clickChange(value) {
     props.clickSideBar(value);
@@ -21,12 +20,12 @@ const SideBar = (props) => {
     >
       <div className="user-info">
         <div className="logo-user">
-          <img alt="#" src={props.user.user?.avatar} />
+          <img alt="#" src={props.user?.avatar} />
         </div>
         <div className={"name-user"}>
           <p>
             {props.user
-              ? props.user.user?.first_name + " " + props.user.user?.last_name
+              ? props.user?.first_name + " " + props.user?.last_name
               : "Please sign in"}
           </p>
         </div>
@@ -51,7 +50,9 @@ const SideBar = (props) => {
       </div>
       <div
         className={
-          activeItem === OPEN_ACCOUNT ? "highlight-item-side" : "item-side item-side-sub"
+          activeItem === OPEN_ACCOUNT
+            ? "highlight-item-side"
+            : "item-side item-side-sub"
         }
         onClick={() => clickChange(OPEN_ACCOUNT)}
       >

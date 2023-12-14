@@ -29,8 +29,7 @@ class Users(db.Model):
   
   role = db.relationship('Roles', backref=db.backref('users'), lazy=True)
     
-  def __init__(self,email, first_name, last_name,role_id,address,phone,password):
-
+  def __init__(self,email,first_name,last_name,role_id,address,phone,password):
     self.email = email
     self.first_name = first_name
     self.last_name = last_name

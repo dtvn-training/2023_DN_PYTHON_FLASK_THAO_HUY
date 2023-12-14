@@ -39,13 +39,10 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <Banner />
-      <NavBar
-        user={currentUser ? currentUser : null}
-        openSideBar={openSideBar}
-      />
+      <NavBar user={currentUser} openSideBar={openSideBar} />
       <div className="main-page">
         <SideBar
-          user={currentUser ? currentUser : null}
+          user={currentUser}
           show={isOpenSideBar}
           clickSideBar={clickSideBar}
           activeItem={openMenu}
