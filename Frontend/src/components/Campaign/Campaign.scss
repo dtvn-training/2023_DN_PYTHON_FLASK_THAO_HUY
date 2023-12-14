@@ -69,8 +69,9 @@
   gap: 20px;
   padding: 8px 50px 0px 50px;
   ul {
-    padding: 0;
-    margin-left: 50.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
