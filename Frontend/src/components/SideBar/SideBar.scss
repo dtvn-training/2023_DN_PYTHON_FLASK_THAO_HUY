@@ -1,11 +1,11 @@
-.side-bar {
-  margin: 0;
-  padding: 0;
+.sidebar {
+  top: 0;
+  min-width: 0;
   max-width: 300px;
   width: 100%;
   background-color: #468faf;
-  min-height: 100vh;
-  transition: all 1s ease;
+  overflow-x: hidden;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 
 .item-side {
@@ -100,7 +100,6 @@
     border-top: 0px;
   }
 
-  
   .item-side:hover {
     background-color: #a7d9ee;
     padding-right: 42px;
@@ -109,20 +108,19 @@
 
   .item-side-sub {
     padding-right: 42px;
-    
   }
 
-  .highlight-item-side  {
-  // padding-left: 15%;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  border-top: white;
-  border-bottom: 0px solid rgb(255, 255, 255);
-  border-radius: 10px;
-  padding-left: 35px;
-  padding-right: 35px;
-  height: 82px;
+  .highlight-item-side {
+    // padding-left: 15%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-top: white;
+    border-bottom: 0px solid rgb(255, 255, 255);
+    border-radius: 10px;
+    padding-left: 35px;
+    padding-right: 35px;
+    height: 82px;
   }
 }
 
@@ -135,12 +133,13 @@
   }
 
   .name-user p {
-   margin-top: 10px;
-   margin-bottom: 10px;
-   font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: 700;
   }
 
-  .item-side,.highlight-item-side {
+  .item-side,
+  .highlight-item-side {
     padding-left: 10%;
     height: 88px;
     font-weight: 500;

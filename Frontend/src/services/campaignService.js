@@ -17,4 +17,8 @@ export const campaignServices = {
     let res = api.put(`/api/update_campaign/${campaignId}`, formData);
     return res;
   },
+  getBannerCampaign: (api) => {
+    let res = api.get(`/api/get_banner_campaign`);
+    return res;
+  },
 };

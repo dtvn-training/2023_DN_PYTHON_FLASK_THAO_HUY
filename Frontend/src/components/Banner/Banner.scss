@@ -10,17 +10,18 @@
   align-items: center;
   justify-content: center;
   background-size: cover;
-  height: 150px;
+  background-repeat: round;
+  height: 50vh;
 }
 
-.each-slide-effect span {
-  padding: 20px;
-  font-size: 20px;
-  background: #efefef;
-  text-align: center;
-}
-.slide-show {
-  width: 10% !important;
+// .each-slide-effect span {
+//   padding: 20px;
+//   font-size: 20px;
+//   background: #efefef;
+//   text-align: center;
+// }
+.slide {
+  height: 40vh;
   overflow: hidden;
 }
 @media screen and (max-width: 1408px) {

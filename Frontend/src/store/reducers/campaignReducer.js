@@ -2,6 +2,7 @@ import {
   FETCH_CAMPAIGN_START,
   FETCH_CAMPAIGN_SUCCESS,
   FETCH_CAMPAIGN_FAILED,
+  FETCH_BANNER_CAMPAIGN,
 } from "../types/campaignType";
 
 const initialState = {
@@ -28,6 +29,11 @@ const campaignReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+      };
+    case FETCH_BANNER_CAMPAIGN:
+      return {
+        ...state,
+        finalURL: action.payload,
       };
     default:
       return state;
