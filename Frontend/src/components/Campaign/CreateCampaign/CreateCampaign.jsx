@@ -7,6 +7,7 @@ import { createCampaignAction } from "../../../store/actions/campaignActions";
 import useAxios from "../../../utils/useAxios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import CampaignImage from "../../Campaign/CampaignImage/CampaignImage";
 import {
   Accordion,
   AccordionItem,
@@ -347,11 +348,12 @@ const CreateCampaign = (props) => {
               </div>
               <div className="camp-text-input">
                 Creative preview:
-                <img
+                {/* <img
                   className="img-preview"
                   src={formik.values.img_preview}
                   alt="img-preview"
-                />
+                /> */}
+                <CampaignImage />
                 {formik.touched.img_preview && formik.errors.img_preview && (
                   <p style={{ color: "red" }}>{formik.errors.img_preview}</p>
                 )}
