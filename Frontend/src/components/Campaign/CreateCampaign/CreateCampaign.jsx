@@ -133,6 +133,12 @@ const CreateCampaign = (props) => {
     props.changePopup();
   };
 
+<<<<<<< HEAD
+=======
+  const changeDetailDrop = () => {
+    setDropDetail(!dropDetail);
+  };
+>>>>>>> 2e9d5a5 (refactor fe)
 
   const handleDateChange = (event, dateField) => {
     const selectedDate = event.target.value;

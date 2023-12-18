@@ -26,6 +26,10 @@ const EditCampaign = (props) => {
 
   const [startTime, setStartTime] = useState("2023-01-01 23:59:59");
   const [endTime, setEndTime] = useState("2023-12-12 23:59:59");
+<<<<<<< HEAD
+=======
+  const [dropDetail, setDropDetail] = useState(true);
+>>>>>>> 2e9d5a5 (refactor fe)
 
   const currentUser = useSelector((state) => state.auth?.currentUser);
 
@@ -123,6 +127,13 @@ const EditCampaign = (props) => {
     props.onClose();
   };
 
+<<<<<<< HEAD
+=======
+  const changeDetailDrop = () => {
+    setDropDetail(!dropDetail);
+  };
+
+>>>>>>> 2e9d5a5 (refactor fe)
   const handleDateChange = (event, dateField) => {
     const selectedDate = event.target.value;
 

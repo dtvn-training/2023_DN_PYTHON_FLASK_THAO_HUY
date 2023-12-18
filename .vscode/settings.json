@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "cSpell.words": [
     "cloudinary",
     "datetime",
@@ -26,3 +27,19 @@
 
   ]
 }
+=======
+    "cSpell.words": [
+        "cloudinary",
+        "datetime",
+        "fontawesome",
+        "formik",
+        "fortawesome",
+        "fslightbox",
+        "lazyload",
+        "persistor",
+        "reduxjs",
+        "toastify",
+        "TTFB"
+    ]
+}
+>>>>>>> 2e9d5a5 (refactor fe)
