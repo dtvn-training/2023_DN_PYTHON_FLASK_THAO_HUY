@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AiOutlineDown, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import moment from "moment";
 import "./CreateCampaign.scss";
 import { createCampaignAction } from "../../../store/actions/campaignActions";
@@ -30,7 +30,7 @@ const CreateCampaign = (props) => {
   const [startTime, setStartTime] = useState("2023-01-01 23:59:59");
   const [endTime, setEndTime] = useState("2023-12-12 23:59:59");
   const [previewBanner, setPreviewBanner] = useState("");
-  const [isDropDetail, setDropDetail] = useState(true);
+  const [dropDetail, setDropDetail] = useState(true);
 
   const formik = useFormik({
     initialValues: {
@@ -84,26 +84,6 @@ const CreateCampaign = (props) => {
         2,
         "Description must have at least 2 characters"
       ),
-      // img_preview: Yup.mixed()
-      //   .required("Please choose your campaign banner")
-      //   .test(
-      //     "FILE_TYPE",
-      //     "Invalid type! Please choose another file",
-      //     (value) =>
-      //       value &&
-      //       [
-      //         "image/png",
-      //         "image/jpg",
-      //         "image/jpeg",
-      //         "image/gif",
-      //         "image/svg",
-      //       ].includes(value.type)
-      //   )
-      //   .test(
-      //     "Fichier taille",
-      //     "Please choose a size less than 1 mb",
-      //     (value) => !value || (value && value.size <= 1024 * 1024)
-      //   ),
       final_url: Yup.string()
         .required("Final URL is required")
         .min(2, "URL must have at least 2 characters")
@@ -111,7 +91,7 @@ const CreateCampaign = (props) => {
     }),
 
     onSubmit: async (values) => {
-      if (values.status === "") {
+      if (values.status == "") {
         values.status = true;
       }
       const formData = {
@@ -154,7 +134,7 @@ const CreateCampaign = (props) => {
   };
 
   const changeDetailDrop = () => {
-    setDropDetail(!isDropDetail);
+    setDropDetail(!dropDetail);
   };
 
   const handleDateChange = (event, dateField) => {
@@ -191,7 +171,7 @@ const CreateCampaign = (props) => {
           <div className="underline"></div>
           <button className="camp-close-btn" onClick={closePopup}>
             <AiOutlineClose
-              className={`${isDropDetail ? "" : "dropped-icon"}`}
+              className={`${dropDetail ? "" : "dropped-icon"}`}
             />
           </button>
         </div>
@@ -211,7 +191,7 @@ const CreateCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Name:
+                Name:{''}
                 <input
                   value={formik.values.name}
                   onChange={formik.handleChange}
@@ -223,7 +203,7 @@ const CreateCampaign = (props) => {
                 )}
               </div>
               <div className="status-camp">
-                User status:
+                User status:{''}
                 <select
                   value={formik.values.status ? formik.values.status : true}
                   onChange={formik.handleChange}
@@ -243,7 +223,7 @@ const CreateCampaign = (props) => {
             <AccordionItemPanel>
               <div className="camp-schedule-input">
                 Schedule:
-                <div className="camp-starttime-container">
+                <div className="camp-startTime-container">
                   <label htmlFor="startDateTimePicker">Start Time: </label>
                   <input
                     type="datetime-local"
@@ -259,10 +239,10 @@ const CreateCampaign = (props) => {
                     <p style={{ color: "red" }}>{formik.errors.start_date}</p>
                   )}
                 </div>
-                <div className="camp-endtime-container">
+                <div className="camp-endTime-container">
                   <label htmlFor="endDateTimePicker">End Time:</label>
                   <input
-                    className="endtime"
+                    className="endTime"
                     type="datetime-local"
                     id="endDateTimePicker"
                     name="end_date"
@@ -285,7 +265,7 @@ const CreateCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Budget:
+                Budget:{''}
                 <input
                   value={formik.values.budget}
                   onChange={formik.handleChange}
@@ -304,7 +284,7 @@ const CreateCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Bid Amount:
+                Bid Amount:{''}
                 <input
                   value={formik.values.bid_amount}
                   onChange={formik.handleChange}
@@ -323,7 +303,7 @@ const CreateCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Title:
+                Title:{''}
                 <input
                   value={formik.values.title}
                   onChange={formik.handleChange}
@@ -335,7 +315,7 @@ const CreateCampaign = (props) => {
                 )}
               </div>
               <div className="camp-text-input">
-                Description:
+                Description:{''}
                 <input
                   value={formik.values.description}
                   onChange={formik.handleChange}
@@ -359,7 +339,7 @@ const CreateCampaign = (props) => {
                 )}
               </div>
               <div className="camp-text-input">
-                Final URL:
+                Final URL:{''}
                 <input
                   value={formik.values.final_url}
                   onChange={formik.handleChange}

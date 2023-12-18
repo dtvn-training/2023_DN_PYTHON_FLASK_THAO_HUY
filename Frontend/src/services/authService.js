@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BACKEND_DOMAIN = process.env.REACT_APP_API_BASE_URL;
 export const authServices = {
-  signin: (data) => {
+  signIn: (data) => {
     return axios({
       url: `${BACKEND_DOMAIN}/api/login`,
       method: "POST",
@@ -15,11 +15,11 @@ export const authServices = {
       method: "POST",
     });
   },
-  getUserInfor: (api) => {
+  getUserInfo: (api) => {
     let res = api.get(`/api/user_info`);
     return res;
   },
-  getAllUserInfor: (api) => {
+  getAllUserInfo: (api) => {
     let res = api.get("/api/all_user_info");
     return res;
   },

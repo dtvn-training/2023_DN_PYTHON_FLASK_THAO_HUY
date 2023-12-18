@@ -23,14 +23,13 @@ const Banner = () => {
   };
 
   const handleChange = (e) => {
-    // Tăng giá trị của count mỗi khi handleChange được gọi
+    // Tang giá trị của count mỗi khi handleChange đơc gọi
     setCount((prevCount) => prevCount + 1);
   };
 
   console.log(count);
   return (
-    <>
-      <div className="slide">
+    <div className="slide">
         <Slide {...properties} onChange={(e) => handleChange(e)}>
           <div className="each-slide-effect">
             <div style={{ backgroundImage: `url(${images[0]})` }}>
@@ -59,7 +58,6 @@ const Banner = () => {
           </div> */}
         </Slide>
       </div>
-    </>
   );
 };
 

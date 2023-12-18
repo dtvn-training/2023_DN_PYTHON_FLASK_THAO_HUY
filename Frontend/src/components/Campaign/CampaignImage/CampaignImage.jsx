@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import ReactCrop from "react-image-crop";
-import axios from "axios";
 import "react-image-crop/dist/ReactCrop.css";
 const setCanvasImage = (image, canvas, crop) => {
   if (!crop || !canvas || !image) {
@@ -89,14 +88,6 @@ export default function CampaignImage() {
             ></canvas>
           </div>
           <button>Get your final URL</button>
-          {/* {completedCrop && (
-            <canvas
-              ref={previewCanvasRef}
-              style={{
-                display: "none",
-              }}
-            />
-          )} */}
         </div>
       )}
     </div>

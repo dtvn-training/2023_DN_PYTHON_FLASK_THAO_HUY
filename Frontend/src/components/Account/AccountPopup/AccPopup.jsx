@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import useAxios from "../../../utils/useAxios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { AiOutlineDown, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import "./AccPopup.scss";
 import { createAccountAction } from "../../../store/actions/accountAction";
 import {
@@ -14,11 +14,11 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
+import PropTypes from "prop-types";
 
 const AccPopup = (props) => {
   const api = useAxios();
   const dispatch = useDispatch();
-  // const [isDropDetail, setDropDetail] = useState(true);
 
   const formik = useFormik({
     initialValues: {
@@ -115,7 +115,7 @@ const AccPopup = (props) => {
             <AccordionItemPanel>
               <div className="detail">
                 <div className="acc-text-input">
-                  Email:
+                  Email:{''}
                   <input
                     value={formik.values.email}
                     onChange={formik.handleChange}
@@ -127,7 +127,7 @@ const AccPopup = (props) => {
                   )}
                 </div>
                 <div className="acc-text-input">
-                  First name:
+                  First name:{''}
                   <input
                     value={formik.values.first_name}
                     onChange={formik.handleChange}
@@ -139,7 +139,7 @@ const AccPopup = (props) => {
                   )}
                 </div>
                 <div className="acc-text-input">
-                  Last name:
+                  Last name:{''}
                   <input
                     value={formik.values.last_name}
                     onChange={formik.handleChange}
@@ -151,7 +151,7 @@ const AccPopup = (props) => {
                   )}
                 </div>
                 <div className="role-acc">
-                  Role:
+                  Role:{''}
                   <select
                     value={formik.values.role_id ? formik.values.role_id : "1"}
                     onChange={formik.handleChange}
@@ -164,7 +164,7 @@ const AccPopup = (props) => {
                   </select>
                 </div>
                 <div className="acc-text-input">
-                  Address:
+                  Address:{''}
                   <input
                     value={formik.values.address}
                     onChange={formik.handleChange}
@@ -176,7 +176,7 @@ const AccPopup = (props) => {
                   )}
                 </div>
                 <div className="acc-text-input">
-                  Phone:
+                  Phone:{''}
                   <input
                     value={formik.values.phone}
                     onChange={formik.handleChange}
@@ -188,7 +188,7 @@ const AccPopup = (props) => {
                   )}
                 </div>
                 <div className="acc-text-input">
-                  Password:
+                  Password:{''}
                   <input
                     value={formik.values.password}
                     onChange={formik.handleChange}
@@ -230,6 +230,12 @@ const AccPopup = (props) => {
       </form>
     </div>
   );
+};
+
+AccPopup.propTypes = {
+  keyWord: PropTypes.string.isRequired,
+  pageNumber: PropTypes.number.isRequired,
+  changePopup: PropTypes.func.isRequired,
 };
 
 export default AccPopup;

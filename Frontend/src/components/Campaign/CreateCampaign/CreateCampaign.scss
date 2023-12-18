@@ -1,7 +1,6 @@
 ::-webkit-scrollbar {
   width: 0.5px;
   scroll-behavior: smooth;
-  // border-radius: 6px;
 }
 .camp-popup {
   position: fixed;
@@ -34,7 +33,11 @@
 }
 
 .camp-schedule-input {
-  .camp-starttime-container {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin: 30px 0px 30px 0px;
+  .camp-startTime-container {
     display: flex;
     input {
       border: none;
@@ -47,7 +50,7 @@
       margin: 0px 20px 0px 73px;
     }
   }
-  .camp-endtime-container {
+  .camp-endTime-container {
     display: flex;
 
     input {
@@ -75,7 +78,6 @@
   position: relative;
   display: flex;
   justify-content: space-between;
-  // border-bottom: 1px solid gray;
   font-weight: bold;
   font-size: 20px;
   align-self: center;
@@ -167,12 +169,7 @@
     left: 170px;
   }
 }
-.camp-schedule-input {
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  margin: 30px 0px 30px 0px;
-}
+
 .status-camp {
   display: flex;
   justify-content: right;
@@ -224,7 +221,7 @@
 
 @media screen and (max-width: 678px) {
   .camp-schedule-input {
-    .camp-starttime-container {
+    .camp-startTime-container {
       label {
         font-weight: 500;
         margin: 0px 20px 0px 77px;

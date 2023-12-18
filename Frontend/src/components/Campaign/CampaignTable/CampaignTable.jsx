@@ -18,8 +18,7 @@ const CampaignTable = (props) => {
   const pageNumber = props.pageNumber;
 
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [isOpenPopup, setOpenPopup] = useState(false);
-  // const [page, setPage] = useState(1);
+  const [openPopup, setOpenPopup] = useState(false);
 
   const handleEditClick = (record) => {
     setSelectedRecord(record);
@@ -30,7 +29,7 @@ const CampaignTable = (props) => {
   };
 
   const changePopup = () => {
-    setOpenPopup(!isOpenPopup);
+    setOpenPopup(!openPopup);
   };
 
   const handleDeleteCampaign = async (campaign) => {
@@ -70,8 +69,8 @@ const CampaignTable = (props) => {
           </tr>
         </thead>
         <tbody>
-          {listCampaigns &&
-            listCampaigns.map((campaign, index = campaign.campaign_id) => {
+          {
+            listCampaigns?.map((campaign, index = campaign.campaign_id) => {
               return (
                 <React.Fragment key={index}>
                   <tr>
@@ -126,7 +125,7 @@ const CampaignTable = (props) => {
         />
       </Stack> */}
 
-      {isOpenPopup && <CreateCampaign changePopup={changePopup} />}
+      {openPopup && <CreateCampaign changePopup={changePopup} />}
       {selectedRecord && (
         <EditCampaign
           record={selectedRecord}

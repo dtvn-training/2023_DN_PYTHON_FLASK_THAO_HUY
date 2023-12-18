@@ -1,8 +1,6 @@
 import { toast } from "react-toastify";
 import { authServices } from "../../services/authService";
 import {
-  LOGIN_ERROR,
-  LOGIN_START,
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
 } from "../types/authType";
@@ -13,7 +11,7 @@ export const loginAction = (loginData, navigate) => {
   return async (dispatch) => {
     dispatch(turnOnLoading());
     try {
-      const res = await authServices.signin(loginData);
+      const res = await authServices.signIn(loginData);
       console.log("file: authActions.js:17 ~ res:", res.data.msg.errorMessage);
       dispatch(turnOffLoading());
 
@@ -57,22 +55,6 @@ export const loginSuccess = (payload) => {
 export const logoutAction = (currentUser, navigate) => {
   return async (dispatch) => {
     try {
-      // if (currentUser.access_token_exp > getDateTime()) {
-      //   await authServices.logout(
-      //     currentUser.refresh_token,
-      //     currentUser.access_token
-      //   );
-      //   await authServices.deleteRefreshToken(currentUser.refresh_token);
-      //   localStorage.clear();
-      //   dispatch(logoutSuccess());
-      //   navigate("/login");
-      // } else {
-      //   await authServices.deleteRefreshToken(currentUser.refresh_token);
-      //   localStorage.clear();
-      //   dispatch(logoutSuccess());
-      //   navigate("/login");
-      // }
-      // Xử lí logic logout gọi api logout xóa in4 user trên db
       dispatch(logoutSuccess());
       localStorage.clear();
       navigate("/login");

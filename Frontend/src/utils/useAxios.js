@@ -1,11 +1,8 @@
 import axios from "axios";
-// import { getDateTime } from "../helpers/checkEXPToken";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../store/actions/authActions";
+import { loginSuccess, logoutAction } from "../store/actions/authActions";
 import { useNavigate } from "react-router-dom";
-import { logoutAction } from "../store/actions/authActions";
-const baseURL = process.env.REACT_APP_API_BASE_URL;
-const useAxios = () => {
+const useAxios = (baseURL) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth?.currentUser);

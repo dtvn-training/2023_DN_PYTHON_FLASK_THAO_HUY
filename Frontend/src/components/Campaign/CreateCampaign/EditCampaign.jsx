@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AiOutlineDown, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import "./CreateCampaign.scss";
 import { updateCampaignAction } from "../../../store/actions/campaignActions";
 import useAxios from "../../../utils/useAxios";
@@ -26,7 +26,7 @@ const EditCampaign = (props) => {
 
   const [startTime, setStartTime] = useState("2023-01-01 23:59:59");
   const [endTime, setEndTime] = useState("2023-12-12 23:59:59");
-  const [isDropDetail, setDropDetail] = useState(true);
+  const [dropDetail, setDropDetail] = useState(true);
 
   const currentUser = useSelector((state) => state.auth?.currentUser);
 
@@ -81,26 +81,6 @@ const EditCampaign = (props) => {
         2,
         "Description must have at least 2 characters"
       ),
-      // img_preview: Yup.mixed()
-      //   .required("Please choose a campaign's banner")
-      //   .test(
-      //     "FILE_TYPE",
-      //     "Invalid type! Please choose another file",
-      //     (value) =>
-      //       value &&
-      //       [
-      //         "image/png",
-      //         "image/jpg",
-      //         "image/jpeg",
-      //         "image/gif",
-      //         "image/svg",
-      //       ].includes(value.type)
-      //   )
-      //   .test(
-      //     "Fichier taille",
-      //     "Please choose a size less than 1 mb",
-      //     (value) => !value || (value && value.size <= 1024 * 1024)
-      //   ),
       final_url: Yup.string()
         .min(2, "URL must have at least 2 characters")
         .max(255, "Exceed the number of characters"),
@@ -145,7 +125,7 @@ const EditCampaign = (props) => {
   };
 
   const changeDetailDrop = () => {
-    setDropDetail(!isDropDetail);
+    setDropDetail(!dropDetail);
   };
 
   const handleDateChange = (event, dateField) => {
@@ -200,7 +180,7 @@ const EditCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Name:
+                Name:{''}
                 <input
                   readOnly={true}
                   value={formik.values.name}
@@ -214,7 +194,7 @@ const EditCampaign = (props) => {
                 )}
               </div>
               <div className="status-camp">
-                User status:
+                User status:{''}
                 <select
                   value={formik.values.status ? formik.values.status : true}
                   onChange={formik.handleChange}
@@ -239,7 +219,7 @@ const EditCampaign = (props) => {
             <AccordionItemPanel>
               <div className="camp-schedule-input">
                 Schedule:
-                <div className="camp-starttime-container">
+                <div className="camp-startTime-container">
                   <label htmlFor="startDateTimePicker">Start Time: </label>
                   <input
                     type="datetime-local"
@@ -257,10 +237,10 @@ const EditCampaign = (props) => {
                     </p>
                   )}
                 </div>
-                <div className="camp-endtime-container">
+                <div className="camp-endTime-container">
                   <label htmlFor="endDateTimePicker">End Time:</label>
                   <input
-                    className="endtime"
+                    className="endTime"
                     type="datetime-local"
                     id="endDateTimePicker"
                     name="end_date"
@@ -285,7 +265,7 @@ const EditCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Budget:
+                Budget:{''}
                 <input
                   value={formik.values.budget}
                   onChange={formik.handleChange}
@@ -306,7 +286,7 @@ const EditCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Bid Amount:
+                Bid Amount:{''}
                 <input
                   value={formik.values.bid_amount}
                   onChange={formik.handleChange}
@@ -327,7 +307,7 @@ const EditCampaign = (props) => {
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="camp-text-input">
-                Title:
+                Title:{''}
                 <input
                   value={formik.values.title}
                   onChange={formik.handleChange}
@@ -341,7 +321,7 @@ const EditCampaign = (props) => {
                 )}
               </div>
               <div className="camp-text-input">
-                Description:
+                Description:{''}
                 <input
                   value={formik.values.description}
                   onChange={formik.handleChange}
@@ -355,7 +335,7 @@ const EditCampaign = (props) => {
                 )}
               </div>
               <div className="camp-text-input">
-                Creative preview:
+                Creative preview:{''}
                 <img
                   className="img-preview"
                   src={
@@ -372,7 +352,7 @@ const EditCampaign = (props) => {
                 )}
               </div>
               <div className="camp-text-input">
-                Final URL:
+                Final URL:{''}
                 <input
                   value={formik.values.final_url}
                   onChange={formik.handleChange}

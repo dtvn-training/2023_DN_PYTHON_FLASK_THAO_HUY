@@ -44,7 +44,7 @@ export const createAccountAction = (formData, fetchForData, api) => {
       }
       if (res.status === 200 && res.data.msg !== "Email already in exist") {
         dispatch(fetchListAccountAction(fetchForData, api));
-        toast.success("Create Account Successffuly!");
+        toast.success("Create Account successfully!");
       }
     } catch (e) {
       console.log(e);

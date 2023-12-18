@@ -28,9 +28,8 @@ const HomePage = () => {
     return setOpenMenu(changeValue);
   }
   const api = useAxios();
-  // khiem test axios custom
   const getUserInfo = async () => {
-    const res = await api.get("/api/user_info");
+    await api.get("/api/user_info");
   };
   useEffect(() => {
     getUserInfo();

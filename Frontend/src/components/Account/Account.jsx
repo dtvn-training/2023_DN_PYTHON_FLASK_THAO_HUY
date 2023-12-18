@@ -13,10 +13,10 @@ import "react-pagination-library/build/css/index.css";
 const Account = () => {
   const typingTimeoutRef = useRef(null);
   const api = useAxios();
-  const [isOpenPopup, setOpenPopup] = useState(false);
-  const [isReload, setReload] = useState(true);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [reload, setReload] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
-  const [keyWord, setkeyWord] = useState("ALL");
+  const [keyWord, setKeyWord] = useState("ALL");
   const dispatch = useDispatch();
   const listAccounts = useSelector((state) => state.account.listAccounts);
   const totalRecords = useSelector((state) => state.account.totalRecords);
@@ -32,7 +32,7 @@ const Account = () => {
       clearTimeout(typingTimeoutRef.current);
     }
     typingTimeoutRef.current = setTimeout(() => {
-      setkeyWord(value);
+      setKeyWord(value);
     }, 600);
   };
 
@@ -65,8 +65,8 @@ const Account = () => {
   };
 
   function changePopup() {
-    setOpenPopup(!isOpenPopup);
-    setReload(!isReload);
+    setOpenPopup(!openPopup);
+    setReload(!reload);
   }
 
   return (
@@ -105,7 +105,7 @@ const Account = () => {
       ) : (
         <div className="acc-nodata-text">NO DATA</div>
       )}
-      {isOpenPopup && (
+      {openPopup && (
         <AccPopup
           changePopup={changePopup}
           keyWord={keyWord}

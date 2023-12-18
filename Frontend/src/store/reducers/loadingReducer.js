@@ -4,7 +4,7 @@ const initialState = {
   isLoading: false,
 };
 
-var loadingReducer = (state = initialState, action) => {
+let loadingReducer = (state = initialState, action) => {
   switch (action.type) {
     case TURN_ON_LOADING:
       return {

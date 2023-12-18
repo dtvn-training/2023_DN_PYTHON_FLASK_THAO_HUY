@@ -87,7 +87,7 @@ const AccUpdatePopup = (props) => {
             <AccordionItemPanel>
               <div className="detail-update">
                 <div className="acc-text-input-update">
-                  Email:
+                  Email:{''}
                   <input
                     readOnly={true}
                     value={formik.values.email}
@@ -96,7 +96,7 @@ const AccUpdatePopup = (props) => {
                   />
                 </div>
                 <div className="acc-text-input-update">
-                  First name:
+                  First name:{''}
                   <input
                     value={formik.values.first_name}
                     onChange={formik.handleChange}
@@ -109,7 +109,7 @@ const AccUpdatePopup = (props) => {
                   )}
                 </div>
                 <div className="acc-text-input-update">
-                  Last name:
+                  Last name:{''}
                   <input
                     value={formik.values.last_name}
                     onChange={formik.handleChange}
@@ -122,7 +122,7 @@ const AccUpdatePopup = (props) => {
                   )}
                 </div>
                 <div className="role-acc">
-                  Role:
+                  Role:{''}
                   <select
                     value={formik.values.role_id ? formik.values.role_id : "1"}
                     onChange={formik.handleChange}
@@ -136,7 +136,7 @@ const AccUpdatePopup = (props) => {
                   </select>
                 </div>
                 <div className="acc-text-input-update">
-                  Address:
+                  Address:{''}
                   <input
                     value={formik.values.address}
                     onChange={formik.handleChange}
@@ -149,7 +149,7 @@ const AccUpdatePopup = (props) => {
                   )}
                 </div>
                 <div className="acc-text-input-update">
-                  Phone:
+                  Phone:{''}
                   <input
                     value={formik.values.phone}
                     onChange={formik.handleChange}

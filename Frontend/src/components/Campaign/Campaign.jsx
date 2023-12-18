@@ -16,29 +16,14 @@ const Campaign = () => {
   const [startTime, setStartTime] = useState("2023-01-01 23:59:59");
   const [endTime, setEndTime] = useState("2023-12-12 23:59:59");
   const [pageNumber, setPageNumber] = useState(1);
-  const [keyWord, setkeyWord] = useState("ALL");
-  const [isOpenPopup, setOpenPopup] = useState(false);
-  const [isReload, setReload] = useState(true); // set Callback
+  const [keyWord, setKeyWord] = useState("ALL");
+  const [openPopup, setOpenPopup] = useState(false);
+  const [reload, setReload] = useState(true); // set Callback
   const api = useAxios();
   const dispatch = useDispatch();
   const listCampaigns = useSelector((state) => state.campaign.listCampaigns);
   const totalRecords = useSelector((state) => state.campaign.totalRecords);
   const pageCount = Math.ceil(totalRecords / 3);
-
-  // const headerExport = [
-  //   { label: "Name", key: "name" },
-  //   { label: "Status", key: "status" },
-  //   { label: "Used Amount", key: "used_amount" },
-  //   { label: "Usage Rate", key: "usage_rate" },
-  //   { label: "Budget", key: "budget" },
-  //   { label: "Bid amount", key: "bid_amount" },
-  //   { label: "Start date", key: "start_date" },
-  //   { label: "End date", key: "end_date" },
-  //   { label: "Description", key: "description" },
-  //   { label: "Final url", key: "final_url" },
-  //   { label: "Title", key: "title" },
-  //   { label: "Banner", key: "banner" },
-  // ];
 
   const handlePageClick = (event) => {
     setPageNumber(event);
@@ -49,13 +34,13 @@ const Campaign = () => {
       clearTimeout(typingTimeoutRef.current);
     }
     typingTimeoutRef.current = setTimeout(() => {
-      setkeyWord(value);
+      setKeyWord(value);
     }, 600);
   };
 
   function changePopup() {
-    setOpenPopup(!isOpenPopup);
-    setReload(!isReload);
+    setOpenPopup(!openPopup);
+    setReload(!reload);
   }
 
   function handleStartTimeChange(event) {
@@ -102,7 +87,7 @@ const Campaign = () => {
     <div className="campaign-grid">
       <div className="camp-filter-bar">
         <div className="camp-datetime">
-          <div className="starttime-container">
+          <div className="startTime-container">
             <label htmlFor="startDateTimePicker">Start Time:</label>
             <input
               type="datetime-local"
@@ -112,10 +97,10 @@ const Campaign = () => {
               onChange={handleStartTimeChange}
             ></input>
           </div>
-          <div className="endtime-container">
+          <div className="endTime-container">
             <label htmlFor="endDateTimePicker">End Time:</label>
             <input
-              className="endtime"
+              className="endTime"
               type="datetime-local"
               id="endDateTimePicker"
               name="endDateTimePicker"
@@ -165,7 +150,7 @@ const Campaign = () => {
       ) : (
         <div className="camp-nodata-text">NO CAMPAIGN FOUND</div>
       )}
-      {isOpenPopup && (
+      {openPopup && (
         <CreateCampaign
           changePopup={changePopup}
           startTime={startTime}
