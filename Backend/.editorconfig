@@ -1,0 +1,2 @@
+[*.py]
+max-line-length = 88

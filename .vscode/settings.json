@@ -1,15 +1,22 @@
 {
-    "cSpell.words": [
-        "cloudinary",
-        "datetime",
-        "fontawesome",
-        "formik",
-        "fortawesome",
-        "fslightbox",
-        "lazyload",
-        "persistor",
-        "reduxjs",
-        "toastify",
-        "TTFB"
-    ]
+  "cSpell.words": [
+    "cloudinary",
+    "datetime",
+    "fontawesome",
+    "formik",
+    "fortawesome",
+    "fslightbox",
+    "lazyload",
+    "persistor",
+    "reduxjs",
+    "toastify",
+    "TTFB"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+  "isort.args": ["--profile", "black"],
+  "AREPL.pythonOptions": ["-u"],
+  "editor.formatOnSave": true
 }

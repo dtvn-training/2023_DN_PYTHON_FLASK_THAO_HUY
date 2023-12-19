@@ -22,7 +22,7 @@ export const fetchListCampaignAction = (initInfo, api) => {
         dispatch(turnOffLoading());
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       dispatch(turnOffLoading());
     }
   };
