@@ -13,7 +13,7 @@ const Dashboard = (props) => {
   const [startTime, setStartTime] = useState("2023-01-01 23:59:59");
   const [endTime, setEndTime] = useState("2023-12-12 23:59:59");
   const [pageNumber, setPageNumber] = useState(1);
-  const [keyWord, setkeyWord] = useState("ALL");
+  const [keyWord, setKeyWord] = useState("ALL");
   const api = useAxios();
   const dispatch = useDispatch();
   const listCampaigns = useSelector((state) => state.campaign.listCampaigns);
@@ -29,7 +29,7 @@ const Dashboard = (props) => {
       clearTimeout(typingTimeoutRef.current);
     }
     typingTimeoutRef.current = setTimeout(() => {
-      setkeyWord(value);
+      setKeyWord(value);
     }, 600);
   };
 
@@ -84,7 +84,7 @@ const Dashboard = (props) => {
             placeholder="Search"
           />
           <div className="data-search-sub">
-            <div className="starttime-container">
+            <div className="startTime-container">
               <label id="label-start-time" htmlFor="startDateTimePicker">
                 Start Time:
               </label>
@@ -96,12 +96,12 @@ const Dashboard = (props) => {
                 onChange={handleStartTimeChange}
               ></input>
             </div>
-            <div className="endtime-container">
+            <div className="endTime-container">
               <label id="label-end-time" htmlFor="endDateTimePicker">
                 End Time:
               </label>
               <input
-                className="endtime"
+                className="endTime"
                 type="datetime-local"
                 id="endDateTimePicker"
                 name="endDateTimePicker"

@@ -1,7 +1,7 @@
 import React from "react";
 import "./Navbar.scss";
 import { TbLayoutSidebarRightExpandFilled } from "react-icons/tb";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutAction } from "../../store/actions/authActions";
 
@@ -17,7 +17,7 @@ const Navbar = (props) => {
 
   return (
     <ul className="nav-bar">
-      <div className="btn-sidebar" onClick={toggleClick}>
+      <div className="btn-sidebar" onClick={toggleClick} onKeyDown={toggleClick}>
         <TbLayoutSidebarRightExpandFilled className="btn-sidebar-icon" />
         <div className="name-btn">Toggle sidebar</div>
       </div>

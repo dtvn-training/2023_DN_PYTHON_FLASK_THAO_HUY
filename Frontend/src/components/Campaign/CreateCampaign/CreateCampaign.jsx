@@ -29,8 +29,7 @@ const CreateCampaign = (props) => {
 
   const [startTime, setStartTime] = useState("2023-01-01 23:59:59");
   const [endTime, setEndTime] = useState("2023-12-12 23:59:59");
-  const [previewBanner, setPreviewBanner] = useState("");
-  const [dropDetail, setDropDetail] = useState(true);
+  const dropDetail = React.useMemo(() => true, []);
 
   const formik = useFormik({
     initialValues: {
@@ -133,9 +132,6 @@ const CreateCampaign = (props) => {
     props.changePopup();
   };
 
-  const changeDetailDrop = () => {
-    setDropDetail(!dropDetail);
-  };
 
   const handleDateChange = (event, dateField) => {
     const selectedDate = event.target.value;

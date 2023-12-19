@@ -10,9 +10,9 @@ const Footer = ({range, setPage, page, slice}) => {
 
     return (
         <div className='tableFooter'>
-            {range.map((el, index) => (
+            {range.map((el) => (
                 <button
-                    key={index}
+                    key={el}
                     className={`${
                         page === el ? 'button activeButton' : 'button inactiveButton'
                     }`}
