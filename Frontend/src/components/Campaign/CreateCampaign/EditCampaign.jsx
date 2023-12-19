@@ -26,7 +26,6 @@ const EditCampaign = (props) => {
 
   const [startTime, setStartTime] = useState("2023-01-01 23:59:59");
   const [endTime, setEndTime] = useState("2023-12-12 23:59:59");
-  const [dropDetail, setDropDetail] = useState(true);
 
   const currentUser = useSelector((state) => state.auth?.currentUser);
 
@@ -122,10 +121,6 @@ const EditCampaign = (props) => {
 
   const closePopup = () => {
     props.onClose();
-  };
-
-  const changeDetailDrop = () => {
-    setDropDetail(!dropDetail);
   };
 
   const handleDateChange = (event, dateField) => {

@@ -1,5 +1,4 @@
 import "./SideBar.scss";
-import { useSelector } from "react-redux";
 import {
   OPEN_ACCOUNT,
   OPEN_CAMPAIGN,

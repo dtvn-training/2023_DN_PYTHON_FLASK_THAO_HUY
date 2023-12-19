@@ -1,17 +1,8 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import "./DashboardTable.scss";
+import React from "react";
 import { FaCircleDot } from "react-icons/fa6";
-import useAxios from "../../../utils/useAxios";
 
 const DashboardTable = (props) => {
-  const api = useAxios();
-  const dispatch = useDispatch();
   const listCampaigns = props.listCampaigns;
-  const startTime = props.startTime;
-  const endTime = props.endTime;
-  const keyWord = props.keyWord;
-  const pageNumber = props.pageNumber;
 
   return (
     <div className="camp-table-data">
@@ -28,8 +19,8 @@ const DashboardTable = (props) => {
           </tr>
         </thead>
         <tbody>
-          {listCampaigns &&
-            listCampaigns.map((campaign, index = campaign.campaign_id) => {
+          {
+            listCampaigns?.map((campaign, index = campaign.campaign_id) => {
               return (
                 <React.Fragment key={index}>
                   <tr>

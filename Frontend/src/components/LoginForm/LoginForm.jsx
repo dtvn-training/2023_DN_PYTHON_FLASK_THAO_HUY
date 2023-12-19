@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -6,10 +6,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import "./LoginForm.scss";
-import {
-  turnOnLoading,
-  turnOffLoading,
-} from "../../store/actions/loadingActions";
 import { loginAction } from "../../store/actions/authActions";
 
 const initialState = {
@@ -20,26 +16,9 @@ const initialState = {
 };
 
 const LoginForm = () => {
-  // const [user, setUser] = useState(initialState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth?.currentUser);
-  // const handleChangeInput = (e) => {
-  //   const { name, value } = e.target;
-  //   setUser({ ...user, [name]: value, err: "", success: "" });
-  // };
-
-  // // catch login button click event generate data sent to login API
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   dispatch(turnOnLoading());
-  //   try {
-
-  //   } catch (err) {
-  //     dispatch(turnOffLoading());
-  //     // err.message && setUser({ ...user, err: err.message, success: "" });
-  //   }
-  // };
 
   const formik = useFormik({
     initialValues: {
