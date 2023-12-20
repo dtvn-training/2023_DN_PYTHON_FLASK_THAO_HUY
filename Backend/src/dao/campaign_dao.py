@@ -1,4 +1,4 @@
-from models.campaignModel import Campaigns
+from app.models.campaignModel import Campaigns
 
 
 def check_date(_start_date, _end_date):

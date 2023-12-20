@@ -1,39 +1,29 @@
 import os
 
 import bcrypt
-from authServices.auth import authMiddleware
-from authServices.authAdmin import authMiddlewareAdmin
+from common.utils.validators.emailValidate import valid_email
+from common.utils.validators.passwordValidate import valid_password
 from config.errorStatus import errorStatus
+from dao.user_dao import find_user_by_email
 from dotenv import load_dotenv
 from flask import jsonify, request
 from flask_restful import Resource
-from utils.validators.emailValidate import validate_email
+from services.authServices.auth import authMiddleware
+from services.authServices.authAdmin import authMiddlewareAdmin
 
-# Load variables in .env environment
 load_dotenv()
-# Status code config to JSON
 errConfig = errorStatus()
 
 REFRESH_TOKEN_SECRET = os.getenv("REFRESH_TOKEN_SECRET")
 ACCESS_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET")
 
 
-def find_user_by_email(email):
-    from models.userModel import Users
-
-    user = Users.query.filter_by(email=email).first()
-    return user
-
-
-# USER MODELS
-
-
 # GET USER INFORMATION
 class getUser(Resource):
     @authMiddleware
     def get(self):
+        from app.models.userModel import Users
         from initSQL import db
-        from models.userModel import Users
 
         user_id = request.user["user_id"]
 
@@ -55,8 +45,8 @@ class getUser(Resource):
 class getAllUser(Resource):
     @authMiddleware
     def get(self):
+        from app.models.userModel import Users
         from initSQL import db
-        from models.userModel import Users
 
         try:
             key_word = request.args.get("key_word")
@@ -145,8 +135,8 @@ class deleteUser(Resource):
     @authMiddleware
     @authMiddlewareAdmin
     def post(self):
+        from app.models.userModel import Users
         from initSQL import db
-        from models.userModel import Users
 
         try:
             content_type = request.headers.get("Content-Type")
@@ -171,31 +161,26 @@ class addUser(Resource):
     @authMiddleware
     @authMiddlewareAdmin
     def post(self):
+        from app.models.userModel import Users
         from initSQL import db
-        from models.userModel import Users
 
+        json = request.get_json()
+        email = json["email"]
+        first_name = json["first_name"]
+        last_name = json["last_name"]
+        role_id = json["role_id"]
+        address = json["address"]
+        phone = json["phone"]
+        password = json["password"].encode("utf-8")
         try:
-            json = request.get_json()
-            email = json["email"]
-            first_name = json["first_name"]
-            last_name = json["last_name"]
-            role_id = json["role_id"]
-            address = json["address"]
-            phone = json["phone"]
-            password = json["password"].encode("utf-8")
-
-            if not validate_email(email):
-                return errConfig.msgFeedback("Invalid email", "", 200)
+            valid_email(email)
 
             if find_user_by_email(email):
                 return errConfig.msgFeedback(
                     "Email already in exist", "", 200
                 )  # noqa: E501
 
-            if len(password) < 6:
-                return errConfig.msgFeedback(
-                    "Password must be at least 6 characters.", "", 200
-                )
+            valid_password(password)
 
             hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
 
@@ -222,8 +207,8 @@ class updateUser(Resource):
     @authMiddleware
     @authMiddlewareAdmin
     def put(self):
+        from app.models.userModel import Users
         from initSQL import db
-        from models.userModel import Users
 
         try:
             content_type = request.headers.get("Content-Type")
@@ -231,7 +216,6 @@ class updateUser(Resource):
                 data_acc = request.json.get(
                     "dataAcc", {}
                 )  # Lấy giá trị của khóa 'dataAcc' hoặc trả về một từ điển trống nếu không tồn tại # noqa: E501
-                print(data_acc)
                 address = data_acc.get("address")
                 first_name = data_acc.get("first_name")
                 last_name = data_acc.get("last_name")
@@ -257,8 +241,8 @@ class updateUser(Resource):
 class deleteAllUser(Resource):
     @authMiddlewareAdmin
     def delete(self):
+        from app.models.userModel import Users
         from initSQL import db
-        from models.userModel import Users
 
         try:
             db.session.query(Users).delete()

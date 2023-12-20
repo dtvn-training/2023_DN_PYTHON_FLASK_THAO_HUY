@@ -2,34 +2,28 @@ import os
 from collections import OrderedDict
 from datetime import datetime
 
-# AUTH
-from auth.auth import authMiddleware
-from auth.authAdmin import authMiddlewareAdmin
-
 # CONFIG
-from config.errorStatus import errorStatus
-from dotenv import load_dotenv
+import config.errorStatus as config
+
+# MODELS
+import initSQL as dbSQL
+from app.models.campaignModel import Campaigns
+from app.models.creativeModel import Creatives
+
+# SERVICES
+from dao.campaign_dao import check_date
 
 # FLASK
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 
-# MODELS
-from initSQL import db
-from models.campaignModel import Campaigns
-from models.creativeModel import Creatives
-
-# SERVICES
-from services.campaign_service import check_date
+# AUTH
+from services.authServices.auth import authMiddleware
+from services.authServices.authAdmin import authMiddlewareAdmin
 from sqlalchemy import desc
 
 app = Flask(__name__)
 api = Api(app)
-
-# Load variables in .env environment
-load_dotenv()
-# Status code config to JSON
-errConfig = errorStatus()
 
 REFRESH_TOKEN_SECRET = os.getenv("REFRESH_TOKEN_SECRET")
 ACCESS_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET")
@@ -53,7 +47,7 @@ class getAllCampaign(Resource):
             offset = (page_number - 1) * limit_number_records
 
             if not isinstance(page_number, int) or page_number < 1:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "", {"page_number": ["Invalid page number"]}, 400
                 )
 
@@ -123,7 +117,7 @@ class getAllCampaign(Resource):
 
                     all_campaign_data.append(campaign_data)
 
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     {
                         "campaign_list": all_campaign_data,
                         "total_records": total_records,
@@ -135,7 +129,7 @@ class getAllCampaign(Resource):
                 )
 
             else:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     {
                         "campaign_list": [],
                         "total_records": 0,
@@ -146,7 +140,7 @@ class getAllCampaign(Resource):
                     200,
                 )
         except Exception as e:
-            return errConfig.msgFeedback(
+            return config.errorStatus.msgFeedback(
                 "Unexpected Error: ", f"{str(e)}", 200
             )  # noqa: E501
 
@@ -158,7 +152,7 @@ class getCampaign(Resource):
         try:
             Campaign = (
                 Campaigns.query.filter_by(campaign_id=_camp_id)
-                .options(db.defer(Campaigns.delete_flag))
+                .options(dbSQL.db.defer(Campaigns.delete_flag))
                 .first()
             )
             if Campaign:
@@ -169,11 +163,11 @@ class getCampaign(Resource):
 
                 return jsonify(Campaign_dict)
             else:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Campaign not found!", "", 200
                 )  # noqa: E501
         except Exception as e:
-            return errConfig.msgFeedback(
+            return config.errorStatus.msgFeedback(
                 "Unexpected Error: ", f"{str(e)}", 200
             )  # noqa: E501
 
@@ -199,15 +193,15 @@ class addCampaign(Resource):
             final_url = json["final_url"]
 
             if not check_date(start_date, end_date):
-                return errConfig.msgFeedback("Invalid date", "", 200)
+                return config.errorStatus.msgFeedback("Invalid date", "", 200)
 
             if len(name) > 120 or len(name) == 0:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Invalid name. Please re-enter", "", 200
                 )  # noqa: E501
 
             if len(title) > 120 or len(name) == 0:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Invalid title. Please re-enter", "", 200
                 )  # noqa: E501
 
@@ -221,7 +215,7 @@ class addCampaign(Resource):
                 or len(bid_amount) == 0
                 or len(budget) == 0
             ):
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Invalid. Please re-enter", "", 200
                 )  # noqa: E501
             try:
@@ -238,9 +232,9 @@ class addCampaign(Resource):
                     used_amount=0,
                     usage_rate=0,
                 )
-                db.session.add(campaign)
-                db.session.commit()
-                db.session.refresh(campaign)
+                dbSQL.db.session.add(campaign)
+                dbSQL.db.session.commit()
+                dbSQL.db.session.refresh(campaign)
 
                 campaign_id = campaign.campaign_id
                 creative = Creatives(
@@ -251,18 +245,18 @@ class addCampaign(Resource):
                     final_url=final_url,
                     delete_flag=False,
                 )
-                db.session.add(creative)
-                db.session.commit()
-                db.session.refresh(creative)
-                return errConfig.msgFeedback(
+                dbSQL.db.session.add(creative)
+                dbSQL.db.session.commit()
+                dbSQL.db.session.refresh(creative)
+                return config.errorStatus.msgFeedback(
                     "Add Campaign successfully!", "", 200
                 )  # noqa: E501
             except Exception as e:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Add Campaign failed!", f"{str(e)}", 200
                 )  # noqa: E501
         except Exception as e:
-            return errConfig.msgFeedback(
+            return config.errorStatus.msgFeedback(
                 "Unexpected Error: ", f"{str(e)}", 200
             )  # noqa: E501
 
@@ -285,7 +279,7 @@ class updateCampaign(Resource):
             final_url = json["final_url"]
 
             if not check_date(start_date, end_date):
-                return errConfig.msgFeedback("Invalid date", "", 200)
+                return config.errorStatus.msgFeedback("Invalid date", "", 200)
 
             if (
                 len(description) > 255
@@ -295,7 +289,7 @@ class updateCampaign(Resource):
                 or len(img_preview) == 0
                 or len(final_url) == 0
             ):
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Invalid. Please re-enter", "", 200
                 )  # noqa: E501
 
@@ -319,17 +313,17 @@ class updateCampaign(Resource):
                 creative.img_preview = img_preview
                 creative.url = final_url
 
-                db.session.commit()
+                dbSQL.db.session.commit()
 
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Update campaign successfully!", "", 200
                 )  # noqa: E501
             except Exception as e:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Update campaign failed!", f"{str(e)}", 200
                 )
         except Exception as e:
-            return errConfig.msgFeedback(
+            return config.errorStatus.msgFeedback(
                 "Unexpected Error: ", f"{str(e)}", 200
             )  # noqa: E501
 
@@ -341,7 +335,9 @@ class deleteCampaign(Resource):
     def delete(self, camp_id):
         try:
             if camp_id is None:
-                return errConfig.msgFeedback("Invalid campaign ID", "", 200)
+                return config.errorStatus.msgFeedback(
+                    "Invalid campaign ID", "", 200
+                )  # noqa: E501
 
             campaign = Campaigns.query.filter(
                 Campaigns.campaign_id == camp_id
@@ -351,18 +347,18 @@ class deleteCampaign(Resource):
             ).first()  # noqa: E501
 
             if campaign:
-                db.session.delete(campaign)
-                db.session.delete(creative)
-                db.session.commit()
-                return errConfig.msgFeedback(
+                dbSQL.db.session.delete(campaign)
+                dbSQL.db.session.delete(creative)
+                dbSQL.db.session.commit()
+                return config.errorStatus.msgFeedback(
                     "Delete Campaign successfully!", "", 200
                 )  # noqa: E501
             else:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Delete Campaign failed!", "", 200
                 )  # noqa: E501
         except Exception as e:
-            return errConfig.msgFeedback(
+            return config.errorStatus.msgFeedback(
                 "Unexpected Error: ", f"{str(e)}", 200
             )  # noqa: E501
 
@@ -377,7 +373,9 @@ class bannerCampaign(Resource):
             user_status = json["user_status"]
 
             if camp_id is None:
-                return errConfig.msgFeedback("Invalid campaign ID", "", 200)
+                return config.errorStatus.msgFeedback(
+                    "Invalid campaign ID", "", 200
+                )  # noqa: E501
 
             camp = Campaigns.query.filter(
                 Campaigns.campaign_id == camp_id
@@ -397,16 +395,16 @@ class bannerCampaign(Resource):
                 camp.used_amount = used_amount
                 camp.usage_rate = usage_rate
                 camp.user_status = user_status
-                db.session.commit()
-                return errConfig.msgFeedback(
+                dbSQL.db.session.commit()
+                return config.errorStatus.msgFeedback(
                     "Update campaign successfully!", "", 200
                 )  # noqa: E501
             else:
-                return errConfig.msgFeedback(
+                return config.errorStatus.msgFeedback(
                     "Update campaign failed!", "", 200
                 )  # noqa: E501
         except Exception as e:
-            return errConfig.msgFeedback(
+            return config.errorStatus.msgFeedback(
                 "Unexpected Error: ", f"{str(e)}", 200
             )  # noqa: E501
 
@@ -433,6 +431,6 @@ class getBannerCampaign(Resource):
                 ]
                 return jsonify(campaigns=tuple_campaign)
             else:
-                return errConfig.statusCode("Campaign not found", 404)
+                return config.errorStatus.statusCode("Campaign not found", 404)
         except Exception as e:
-            return errConfig.statusCode(str(e), 500)
+            return config.errorStatus.statusCode(str(e), 500)

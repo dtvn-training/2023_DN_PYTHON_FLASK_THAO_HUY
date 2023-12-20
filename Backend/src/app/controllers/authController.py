@@ -4,7 +4,8 @@ from datetime import datetime
 import bcrypt
 import jwt
 import pytz
-from authServices.createToken import createAccessToken, createRefreshToken
+from common.utils.validators.emailValidate import valid_email
+from common.utils.validators.passwordValidate import valid_password
 from config.errorStatus import errorStatus
 from dotenv import load_dotenv
 from flask import request
@@ -15,11 +16,14 @@ from jwt.exceptions import (
     InvalidSignatureError,
     InvalidTokenError,
 )
+from services.authServices.createToken import (  # noqa: E501
+    createAccessToken,
+    createRefreshToken,
+)
 from sqlalchemy.orm.exc import NoResultFound
-from utils.validators.emailValidate import validate_email
 
 load_dotenv()
-# Status code config to JSON
+
 errConfig = errorStatus()
 
 REFRESH_TOKEN_SECRET = os.getenv("REFRESH_TOKEN_SECRET")
@@ -29,8 +33,8 @@ ACCESS_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET")
 # LOGIN
 class login(Resource):
     def post(self):
+        from app.models.userModel import Users
         from initSQL import db
-        from models.userModel import Users
 
         try:
             content_type = request.headers.get("Content-Type")
@@ -45,32 +49,10 @@ class login(Resource):
                         "Please fill in email/password field!", "", 400
                     )
 
-                # CHECK INPUT IS STRING
-                if not isinstance(email, str):
-                    return errConfig.msgFeedback(
-                        "Email must be a string!", "", 400
-                    )  # noqa: E501
-
-                if not isinstance(password, bytes):
-                    return errConfig.msgFeedback(
-                        "Password must be a string!", "", 400
-                    )  # noqa: E501
-
                 # CHECK VALID EMAIL
-                if not validate_email(email):
-                    return errConfig.msgFeedback(
-                        "Invalid email!", "", 400
-                    )  # noqa: E501
+                valid_email(email)
 
-                # CHECK LENGTH INPUT
-                if len(email) > 255:
-                    return errConfig.msgFeedback(
-                        "Email is over maximum characters", "", 400
-                    )
-                if len(password) < 6:
-                    return errConfig.msgFeedback(
-                        "Password is over maximum characters", "", 400
-                    )
+                valid_password(password)
 
                 # CHECK MATCH EMAIL & PASSWORD IN DB
                 User = (
@@ -149,7 +131,7 @@ class login(Resource):
 # Get ACCESS_TOKEN
 class getAccessToken(Resource):
     def post(self):
-        from models.userModel import Users
+        from app.models.userModel import Users
 
         try:
             json = request.get_json()

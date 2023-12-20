@@ -3,10 +3,6 @@ from datetime import datetime
 from initSQL import db
 
 
-def generate_uuid():
-    return
-
-
 class Users(db.Model):
     user_id = db.Column(db.INT, primary_key=True, autoincrement=True)
     email = db.Column(db.NVARCHAR(120), nullable=False)
@@ -23,7 +19,7 @@ class Users(db.Model):
     phone = db.Column(db.VARCHAR(11), nullable=False)
     avatar = db.Column(
         db.NVARCHAR(255),
-        default="https://res.cloudinary.com/dooge27kv/image/upload/v1667982724/project/avatar.png",
+        default="https://res.cloudinary.com/dooge27kv/image/upload/v1667982724/project/avatar.png",  # noqa: E501
     )
     actions = db.Column(db.VARCHAR(150), nullable=True)
     create_at = db.Column(db.TIMESTAMP, default=datetime.now())

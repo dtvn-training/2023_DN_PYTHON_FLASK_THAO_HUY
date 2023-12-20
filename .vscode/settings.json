@@ -18,5 +18,11 @@
   },
   "isort.args": ["--profile", "black"],
   "AREPL.pythonOptions": ["-u"],
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.extraPaths": [
+    "./Backend/src/",
+
+  ]
 }

@@ -1,21 +1,25 @@
 import os
 
+from app.routes.authRoute import initialAuthRoute
+from app.routes.campaignRoute import initialCampaignRoutes
+from app.routes.userRoute import initialUserRoutes
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
+from initSQL import db
+
+# Load variables in .env environment
+load_dotenv()
+
+app = Flask(__name__)
+api = Api(app)
+
+# Cross-origin
+CORS(app, supports_credentials=True)
 
 
 def create_app():
-    from initSQL import db
-
-    app = Flask(__name__)
-    api = Api(app)
-    # Cross-origin
-    CORS(app, supports_credentials=True)
-
-    # Load variables in .env environment
-    load_dotenv()
     DB_URL = os.getenv("DB_URL")
 
     app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
@@ -24,10 +28,10 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        # from models.campaignModel import Campaigns
-        # from models.creativeModel import Creatives
-        # from models.rolesModel import Roles
-        # from models.userModel import Users
+        from app.models.campaignModel import Campaigns
+        from app.models.creativeModel import Creatives
+        from app.models.rolesModel import Roles
+        from app.models.userModel import Users
 
         createTable = db.create_all()
 
@@ -36,13 +40,9 @@ def create_app():
         else:
             print("\n Models are all created successfully!")
 
-    # Routes
-    from routes.campaignRoute import initialRoutesCampaign
-    from routes.userRoute import initialRoutes
-
-    initialRoutes(api)
-    initialRoutesCampaign(api)
-
+    initialUserRoutes(api)
+    initialCampaignRoutes(api)
+    initialAuthRoute(api)
     return app
 
 
